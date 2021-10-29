@@ -1,0 +1,87 @@
+.login-page {
+    width: 100%;
+    height: 100vh;
+    background: url('./media/login-fon.png') no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    overflow: auto;
+}
+
+.login-window {
+    width: 500px;
+    height: 500px;
+    background: #fff;
+    border-radius: 20px;
+}
+
+.login-title-p {
+    color: #464646;
+    font-weight: 900;
+    font-size: 58px;
+    margin: 54px 0 27px 0;
+}
+
+.login-form {
+    width: 70%;
+    height: 60%;
+    position: relative;
+    margin: auto;
+}
+
+.login-input-title {
+    margin: 0 15px;
+    font-weight: 700;
+    font-size: 16px;
+    text-align: start;
+}
+
+.login-form-login-input-box,
+.login-form-password-input-box {
+    width: 100%;
+    display: flex;
+}
+
+.login-form-input {
+    width: 95%;
+    padding: 15px 10px;
+    margin: 10px 0 15px 0;
+    font-size: 20px;
+    border: 1px solid #AFAFAF;
+    border-radius: 8px;
+    outline: none;
+}
+
+.login-form-password-input-box {
+    position: relative;
+}
+
+.show-password-icon {
+    border: none;
+    background: none;
+    cursor: pointer;
+    position: absolute;
+    right: 2%;
+    top: 30%;
+}
+
+.show-password-icon img {
+    pointer-events: none;
+}
+
+.login-form-button {
+    background: #7A68B7;
+    border: none;
+    border-radius: 10px;
+    padding: 20px 43%;
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+}

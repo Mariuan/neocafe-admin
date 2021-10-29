@@ -1,0 +1,154 @@
+.menu {
+    width: 95%;
+    margin: auto;
+}
+
+.menu-filter-block {
+    display: grid;
+    grid-template-columns: 2fr 1fr 5fr;
+    margin: 40px 0;
+}
+
+.menu-filter-search {
+    display: flex;
+    align-items: center;
+}
+
+.menu-filter-select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-filter-by-categories {
+    height: 100%;
+    box-sizing: content-box;
+    color: #9E9E9E;
+    padding: 0 6px;
+    text-align: start;
+    border: 1px solid #DDDCDC;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+    width: 95%;
+    margin: 0 20px;
+}
+
+.menu-filter-other-options {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.menu-filter-add-button {
+    cursor: pointer;
+}
+
+.menu-product-list-title {
+    display: grid;
+    grid-template-columns: 1fr 5fr 3fr 7fr 4fr;
+}
+
+.menu-product-list-title-item {
+    font-size: 18px;
+    font-weight: 500;
+    text-align: start;
+
+}
+
+.menu-product-list-number {
+    margin-left: 20px;
+}
+
+.menu-product-list-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 6fr 4fr 9fr 5.2fr;
+    text-align: start;
+    font-size: 18px;
+    font-weight: 500;
+    margin: 5px 0 5px 0;
+    margin-bottom: 5px;
+    padding: 10px 0;
+    cursor: pointer;
+    border: 1px solid #fff;
+    
+}
+.menu-product-list-item-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-product-list-item-name {
+    display: flex;
+    align-items: center;
+}
+
+.menu-product-list-item-volume {
+    display: flex;
+    align-items: center;
+}
+
+.menu-product-list-item-consist {
+    display: flex;
+    align-items: center;
+}
+
+.menu-product-list-item-price {
+    display: flex;
+    align-items: center;
+}
+
+.menu-product-list-item-image {
+    width: 60px;
+    max-height: 50px;
+    overflow: hidden;
+}
+
+.no-event {
+    pointer-events: none;
+}
+
+.selected {
+    background: #E6EFFE;
+    border: 1px solid #D2E1FF;
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+
+.employees-list-title {
+    display: grid;
+    grid-template-columns: 1fr 4fr 2fr 3fr 3fr 5fr;
+    text-align: start;
+    margin-left: 20px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.employees-list-item {
+    display: grid;
+    grid-template-columns: 0.5fr 4.5fr 2fr 3fr 3fr 4.5fr .5fr;
+    line-height: 20px;
+    padding: 20px 10px;
+    border: 1px solid #fff;
+    margin: 5px 0;
+    cursor: pointer;
+}
+
+.employees-list-item-block {
+    display: flex;
+    align-items: center;
+}
+
+.employees-list-item-number {
+    justify-content: center;
+}
+
+.employees-list-item-name {
+    margin-left: 17%;
+}
+
+.employees-list-item-options {
+    flex-direction: column;
+    line-height: 6px;
+}

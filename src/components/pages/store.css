@@ -1,0 +1,120 @@
+.store {
+    width: 95%;
+    margin: auto;
+}
+
+.store-filter-block {
+    display: grid;
+    grid-template-columns: 2.2fr 2fr 4fr;
+    margin: 40px 0;
+}
+
+.store-filter-search {
+    display: flex;
+    align-items: center;
+}
+
+.store-filter-select {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.store-filter-by-category,
+.store-filter-by-branch {
+    height: 100%;
+    box-sizing: content-box;
+    color: #9E9E9E;
+    padding: 0 6px;
+    text-align: start;
+    border: 1px solid #DDDCDC;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.store-filter-by-category {
+    width: 45%;
+}
+.store-filter-by-branch {
+    width: 45%;
+    margin: 0 20px;
+}
+
+.store-filter-extra-options {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.store-filter-rating-button {
+    padding: 15px 13px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    background: #2A58AD;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    margin: 0 30px;
+}
+
+.store-filter-add-button {
+    cursor: pointer;
+}
+
+.store-products-list-title {
+    display: grid;
+    grid-template-columns: 1fr 10fr 5fr 7fr 10fr;
+    text-align: start;
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 20px;
+}
+
+.store-products-list-title-number,
+.store-products-list-title-name,
+.store-products-list-title-quantity,
+.store-products-list-title-limit,
+.store-products-list-title-date {
+    display: flex;
+    align-items: center;
+}
+
+.store-products-list-title-number {
+    text-align: center;
+}
+
+.store-product-list-item {
+    display: grid;
+    grid-template-columns: 1fr 10fr 5fr 7fr 9fr 1fr;
+    text-align: start;
+    font-size: 18px;
+    font-weight: 500;
+    border: 1px solid #fff;
+    padding: 20px 0;
+    cursor: pointer;
+
+}
+
+.store-product-list-item-number,
+.store-product-list-item-name,
+.store-product-list-item-quantity,
+.store-product-list-item-limit,
+.store-product-list-item-date,
+.store-product-list-item-option {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.store-product-list-item-number {
+    justify-content: center;
+    margin: 0;
+}
+
+.store-product-list-item-option {
+    flex-direction: column;
+    line-height: 6px;
+}

@@ -1,0 +1,47 @@
+.header {
+    width: 100%;
+    height: 80px;
+    background: #2A58AD;
+    display: flex;
+    align-items: center;
+    padding: 0 50px;
+}
+
+.header_icon {
+    width: 5%;
+    cursor: pointer;
+    margin-right: 50px;
+
+}
+
+.header-nav {
+    display: flex;
+    width: 85%;
+}
+
+.header-nav_item {
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    padding: 12px 40px;
+    margin: 0 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.active {
+    background: #22478C;
+    color: #FF9C68;
+}
+
+.header_notification-logo {
+    width: 30px;
+    cursor: pointer;
+}
+
+.header_signout-logo {
+    width: 30px;
+    cursor: pointer;
+    margin: 0 10px;
+}
