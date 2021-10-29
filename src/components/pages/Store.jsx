@@ -26,7 +26,6 @@ const Store = () => {
                 <div className="store-filter-select">
                     <select className="store-filter-by-branch" defaultValue={-1} onChange={(e)=>{
                         setFilterByBranch(parseInt(e.target.value));
-                        // setFilterByBranch(parseInt(e.target.value));
                         if (e.target.value != -1) {
                             e.target.style.color = "#000";
                         }
@@ -77,7 +76,6 @@ const Store = () => {
             </div>
             <div className="store-products-render-list">
                 {renderList.filter((item)=>{
-                    console.log(item.category);
                     if (filterByName == '') {
                         if (filterByBranch == -1) {
                             if (filterByCategory == -1) {

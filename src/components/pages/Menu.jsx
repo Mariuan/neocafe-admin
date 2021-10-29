@@ -13,7 +13,7 @@ const Menu = () => {
     
     
     const fetchProducts = async () => {
-        axios.get('//neocafe6.herokuapp.com/dishes').catch((err)=>console.log(err)).then((res)=>dispatch(setProducts(res.data)));
+        axios.get('https://neocafe6.herokuapp.com/dishes').catch((err)=>console.log(err)).then((res)=>dispatch(setProducts(res.data)));
     }
 
     const fetchCategories = async () => {
