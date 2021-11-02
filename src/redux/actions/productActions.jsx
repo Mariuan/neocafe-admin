@@ -7,6 +7,13 @@ export const setProducts = (products) => {
     }
 }
 
+export const setDishes = (dishes) => {
+    return {
+        type: "SET_DISHES",
+        payload: dishes,
+    }
+}
+
 export const setCategories = (categories) => {
     return {
         type: "SET_CATEGORIES",

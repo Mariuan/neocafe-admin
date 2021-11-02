@@ -20,6 +20,10 @@ function App() {
   const [header, setHeader ] = useState(true);
   const history = useHistory();
   useEffect(()=>{
+    if (window.location.pathname == '/menu') setPage(0);
+    else if (window.location.pathname == '/store') setPage(1);
+    else if (window.location.pathname == '/branches') setPage(2);
+    else if (window.location.pathname == '/employees') setPage(3);
     if (window.location.pathname=="/login") {
       setHeader(false);
     }

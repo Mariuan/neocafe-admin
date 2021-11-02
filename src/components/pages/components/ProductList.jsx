@@ -12,7 +12,7 @@ const ProductList = () => {
     }
     const productList = useSelector((state)=>state);
     const categoriesList = useSelector((state)=>state).allProducts.categories;
-    const renderList = productList.allProducts.products.filter((item)=>{
+    const renderList = productList.allProducts.dishes.filter((item)=>{
         if (item.category) console.log("Didn't");
         if (filter === '') {
             if (categoryFilter == -1) return item;

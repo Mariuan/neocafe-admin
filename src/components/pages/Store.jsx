@@ -1,9 +1,17 @@
-import React,{ useState } from 'react'
+import React,{ useState, useEffect } from 'react'
 import Search from './components/Search';
 import AddButton from '../media/AddButton.svg';
 import './store.css';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { setProducts } from '../../redux/actions/productActions';
+
+
+const fethcProducts = async () => {
+    const response = await axios.get('https://neocafe6.herokuapp.com/products').catch((err)=>console.log(err));
+    return await response.data;
+}
 
 const Store = () => {
     const dispatch = useDispatch();
@@ -14,6 +22,11 @@ const Store = () => {
     const handleFilterByName = (e) => {
         setFilterByName(e.target.value);
     }
+
+    useEffect(() => {
+        fethcProducts().then((res)=>dispatch(setProducts(res)));
+        
+    }, [])
 
     const products = useSelector((state)=>state);
     const renderList = products.allProducts.store;
@@ -120,12 +133,12 @@ const Store = () => {
                             }
                         }
                     }
-                }).map(({id, name, quantity, limit, date}, index)=>(
+                }).map(({id, name, min, unit, date}, index)=>(
                     <div key={id} className="store-product-list-item">
                         <div className="store-product-list-item-number no-event">{index}</div>
                         <div className="store-product-list-item-name no-event">{name}</div>
-                        <div className="store-product-list-item-quantity no-event">{quantity}</div>
-                        <div className="store-product-list-item-limit no-event">{limit}</div>
+                        <div className="store-product-list-item-quantity no-event">-</div>
+                        <div className="store-product-list-item-limit no-event">{min}{` ${unit}`}</div>
                         <div className="store-product-list-item-date no-event">{date}</div>
                         <div className="store-product-list-item-option">
                             <div>.</div>
