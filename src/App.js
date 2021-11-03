@@ -31,15 +31,13 @@ function App() {
       setHeader(true);
     }
   }, [history]);
-
   return (
     <div className="App">
       {header && 
       <div className="header">
       <img src={logo} alt="logo" className="header_icon"/>
       <div className="header-nav">
-        {page == 0 &&
-          <Link to="/menu" className="header-nav_item active" onClick={(e)=>{
+          <Link to="/menu" className={`header-nav_item ${page == 0 && 'active'}`} onClick={(e)=>{
             const list =  e.target.parentNode.childNodes;
             for (let i = 0; i < 4; i++) {
               list[i].classList.remove('active');
@@ -49,21 +47,7 @@ function App() {
           }}>
             Меню
           </Link>
-        }
-        {page != 0 &&
-          <Link to="/menu" className="header-nav_item" onClick={(e)=>{
-            const list =  e.target.parentNode.childNodes;
-            for (let i = 0; i < 4; i++) {
-              list[i].classList.remove('active');
-            }
-            e.target.classList.add('active');
-            setPage(0);
-          }}>
-            Меню
-          </Link>
-        }
-        {page == 1 &&
-          <Link to="/store" className="header-nav_item active" onClick={(e)=>{
+          <Link to="/store" className={`header-nav_item ${page == 1 && 'active'}`} onClick={(e)=>{
             const list =  e.target.parentNode.childNodes;
             for (let i = 0; i < 4; i++) {
               list[i].classList.remove('active');
@@ -73,21 +57,7 @@ function App() {
           }}>
             Склад
           </Link>
-        }
-        {page != 1 &&
-          <Link to="/store" className="header-nav_item" onClick={(e)=>{
-            const list =  e.target.parentNode.childNodes;
-            for (let i = 0; i < 4; i++) {
-              list[i].classList.remove('active');
-            }
-            e.target.classList.add('active');
-            setPage(1);
-          }}>
-            Склад
-          </Link>
-        }
-        {page == 2 &&
-        <Link to="/branches" className="header-nav_item active" onClick={(e)=>{
+        <Link to="/branches" className={`header-nav_item ${page == 2 && "active"}`} active onClick={(e)=>{
           const list =  e.target.parentNode.childNodes;
           for (let i = 0; i < 4; i++) {
             list[i].classList.remove('active');
@@ -96,20 +66,8 @@ function App() {
           setPage(2);
         }}>
           Филиалы
-        </Link>}
-        {page != 2 &&
-        <Link to="/branches" className="header-nav_item" onClick={(e)=>{
-          const list =  e.target.parentNode.childNodes;
-          for (let i = 0; i < 4; i++) {
-            list[i].classList.remove('active');
-          }
-          e.target.classList.add('active');
-          setPage(2);
-        }}>
-          Филиалы
-        </Link>}
-        {page == 3 &&
-        <Link to="/employees" className="header-nav_item active" onClick={(e)=>{
+        </Link>
+        <Link to="/employees" className={`header-nav_item ${page == 3 && "active"}`} onClick={(e)=>{
           const list =  e.target.parentNode.childNodes;
           for (let i = 0; i < 4; i++) {
             list[i].classList.remove('active');
@@ -118,18 +76,7 @@ function App() {
           setPage(3);
         }}>
           Сотрудники
-        </Link>}
-        {page != 3 &&
-        <Link to="/employees" className="header-nav_item" onClick={(e)=>{
-          const list =  e.target.parentNode.childNodes;
-          for (let i = 0; i < 4; i++) {
-            list[i].classList.remove('active');
-          }
-          e.target.classList.add('active');
-          setPage(3);
-        }}>
-          Сотрудники
-        </Link>}
+        </Link>
 
       </div>
       <div className="header_extra-options">
