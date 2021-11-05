@@ -27,7 +27,7 @@ const Employees = () => {
     const fetchEmployees = async () => {
         const response = await axios.get('https://neocafe6.herokuapp.com/users', {
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem('neo-cafe-token')}`
+                "Authorization": `Bearer ${localStorage.getItem('neo-cafe-admin-token')}`
             }
         });
         dispatch(setEmployees(response.data));

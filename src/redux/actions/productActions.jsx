@@ -49,6 +49,13 @@ export const setLogin = (token) => {
     }
 }
 
+export const setToken = (token) => {
+    return {
+        type: "SET_TOKEN",
+        payload: token
+    }
+}
+
 export const login = (data) => {
     return {
         type: "LOGIN",

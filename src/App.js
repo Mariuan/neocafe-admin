@@ -14,85 +14,52 @@ import Employees from './components/pages/Employees';
 import logo from './components/media/neocafe.svg';
 import notification_logo from './components/media/notification-logo.svg'; 
 import SignOutLogo from './components/media/SignOut.svg';
+import LoginCheck from './components/LoginCheck';
+import { setToken } from './redux/actions/productActions';
 
 function App() {
-  const [page, setPage] = useState(0);
-  const [header, setHeader ] = useState(true);
-  const history = useHistory();
-  useEffect(()=>{
-    if (window.location.pathname == '/menu') setPage(0);
-    else if (window.location.pathname == '/store') setPage(1);
-    else if (window.location.pathname == '/branches') setPage(2);
-    else if (window.location.pathname == '/employees') setPage(3);
-    if (window.location.pathname=="/login") {
-      setHeader(false);
+  const dispatch = useDispatch()
+  const state = useSelector((state)=>state);
+  if (!state.allProducts.token) {
+    if (localStorage.getItem('neo-cafe-admin-token')){
+      axios.get('https://neocafe6.herokuapp.com/users', {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem('neo-cafe-admin-token')}`
+            }
+        }).catch((err)=>{
+            localStorage.clear();
+        }).then((res)=>{
+            if (res.status) {
+                if (res.status >= 200 && res.status < 400) {
+                    dispatch(setToken(localStorage.getItem('neo-cafe-admin-token')));
+                }
+            }
+        })
     }
     else {
-      setHeader(true);
+      return(
+        <>
+          <Route path="/login" component={LoginCheck}/>
+          <Redirect to="/login"/>
+        </>
+      )
     }
-  }, [history]);
+  }
+  else {
+    return(
+      <>
+        <Route path="/" component={Main}/>
+        <Switch>
+          <Route path="/menu" component={Menu}/>
+          <Route path="/store" component={Store}/>
+          <Route path="/branches" component={Branches}/>
+          <Route path="/employees" component={Employees}/>
+        </Switch>
+      </>
+    )
+  }
   return (
-    <div className="App">
-      {header && 
-      <div className="header">
-      <img src={logo} alt="logo" className="header_icon"/>
-      <div className="header-nav">
-          <Link to="/menu" className={`header-nav_item ${page == 0 && 'active'}`} onClick={(e)=>{
-            const list =  e.target.parentNode.childNodes;
-            for (let i = 0; i < 4; i++) {
-              list[i].classList.remove('active');
-            }
-            e.target.classList.add('active');
-            setPage(0);
-          }}>
-            Меню
-          </Link>
-          <Link to="/store" className={`header-nav_item ${page == 1 && 'active'}`} onClick={(e)=>{
-            const list =  e.target.parentNode.childNodes;
-            for (let i = 0; i < 4; i++) {
-              list[i].classList.remove('active');
-            }
-            e.target.classList.add('active');
-            setPage(1);
-          }}>
-            Склад
-          </Link>
-        <Link to="/branches" className={`header-nav_item ${page == 2 && "active"}`} active onClick={(e)=>{
-          const list =  e.target.parentNode.childNodes;
-          for (let i = 0; i < 4; i++) {
-            list[i].classList.remove('active');
-          }
-          e.target.classList.add('active');
-          setPage(2);
-        }}>
-          Филиалы
-        </Link>
-        <Link to="/employees" className={`header-nav_item ${page == 3 && "active"}`} onClick={(e)=>{
-          const list =  e.target.parentNode.childNodes;
-          for (let i = 0; i < 4; i++) {
-            list[i].classList.remove('active');
-          }
-          e.target.classList.add('active');
-          setPage(3);
-        }}>
-          Сотрудники
-        </Link>
-
-      </div>
-      <div className="header_extra-options">
-        <img src={notification_logo} alt="notifications" className="header_notification-logo"/>
-        <img src={SignOutLogo} alt="Sign out" className="header_signout-logo"/>
-      </div>
-    </div>}
-      <Switch>
-        <Route path="/" exact component={Main}></Route>
-        <Route path="/login" component={Login}></Route>
-        <Route path="/menu" component={Menu}></Route>
-        <Route path="/store" component={Store}></Route>
-        <Route path="/branches" component={Branches}></Route>
-        <Route path="/employees" component={Employees}></Route>
-      </Switch>
-    </div>
+    <></>
   );
 }
 

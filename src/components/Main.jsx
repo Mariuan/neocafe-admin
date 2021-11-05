@@ -2,50 +2,53 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setLogin } from '../redux/actions/productActions';
+import logo from './media/neocafe.svg';
 import './main.css';
+import { Redirect, Link } from 'react-router-dom';
 
-
-const CheckToken = async (token) => {
-    const dispatch = useDispatch();
-    const response = await axios.get('https://neocafe6.herokuapp.com/users', {
-        headers: {
-            authorization: `Bearer ${token}`
-        }
-    }).catch((err)=>console.log(err));
-    if (response['statusCode']){
-        if (response['statusCode'] == 401) {
-            dispatch(setLogin(false));
-        }
-        else {
-            dispatch(setLogin(true));
-        }
-    }
-    
-}
 
 const Main = () => {
-    if (!localStorage.getItem('neo-cafe-token')) window.location="/login";
-    else {
-        const token = localStorage.getItem('neo-cafe-token');
-        CheckToken(token);
+    const [page, setPage] = useState('menu');
+    if (window.location.pathname == '/') {
+        return (<Redirect to="/menu" />)
     }
-    const [ page, setPage ] = useState('menu');
-    if (page == 'menu') {
-        window.location = '/menu';
-    }
-    else if (page == 'store') {
-        window.location = '/store'
-    }
-    else if (page == 'branches') {
-        window.location = '/branches';
-    }
-    else {
-        window.location = '/employees';
-    }
+    
     return (
-        <>
-        </>
+        <div className="header">  
+            <img src={logo} alt="logo" className="header_icon"/>
+            <div className="header-nav">
+                <Link to='/menu'
+                className={`header-nav_item ${page == 'menu' && `active`}`}
+                onClick={(e)=>{
+                    setPage('menu');
+                }}>
+                    Меню
+                </Link>
+                <Link to='/store'
+                className={`header-nav_item ${page == 'store' && `active`}`}
+                onClick={(e)=>{
+                    setPage('store');
+                }}>
+                    Склад
+                </Link>
+                <Link to='/branches'
+                className={`header-nav_item ${page == 'branches' && `active`}`}
+                onClick={(e)=>{
+                    setPage('branches');
+                }}>
+                    Филиалы
+                </Link>
+                <Link to='/employees'
+                className={`header-nav_item ${page == 'employees' && `active`}`}
+                onClick={(e)=>{
+                    setPage('employees');
+                }}>
+                    Сотрудники
+                </Link>
+            </div>
+        </div>
     )
 }
 
 export default Main
+
