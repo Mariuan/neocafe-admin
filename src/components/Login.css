@@ -21,6 +21,10 @@
     border-radius: 20px;
 }
 
+.login-title {
+    text-align: center;
+}
+
 .login-title-p {
     color: #464646;
     font-weight: 900;
@@ -84,4 +88,8 @@
     font-weight: 700;
     font-size: 18px;
     cursor: pointer;
+}
+
+.incorrect {
+    border: 1px solid #FF1111;
 }

@@ -41,9 +41,10 @@ export const productReducer = (state = intialState, {type, payload}) => {
         case ActionTypes.SET_EMPLOYEES:
             return {...state, employees: payload};
         case ActionTypes.SET_LOGIN:
-            state.token = payload;
-            localStorage.setItem('neo-cafe-token', payload);
-            return state;
+            localStorage.setItem('neo-cafe-admin-token', payload);
+            return {...state, token: payload};
+        case ActionTypes.SET_TOKEN:
+            return {...state, token: true};
         case ActionTypes.LOGIN:
             return state;
         default:
