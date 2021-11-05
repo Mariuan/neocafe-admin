@@ -2,18 +2,20 @@ import React, {useState} from 'react'
 import Search from '../components/Search';
 import AddButton from '../../media/AddButton.svg';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import '../menu.css';
+import NewDish from './NewDish';
 
 const ProductList = () => {
     const [filter, setFilter] = useState('');
     const [categoryFilter, setCategoryFilter] = useState(-1);
+    const [newDish, setNewDish] = useState(false);
     const handleFilterByName = (e) => {
         setFilter(e.target.value);
     }
     const productList = useSelector((state)=>state);
     const categoriesList = useSelector((state)=>state).allProducts.categories;
     const renderList = productList.allProducts.dishes.filter((item)=>{
-        if (item.category) console.log("Didn't");
         if (filter === '') {
             if (categoryFilter == -1) return item;
             else {
@@ -31,7 +33,7 @@ const ProductList = () => {
                 }
             }
         }
-    }).map(({id, name, description, price, image}, index)=>(
+    }).map(({id, name, description, price, image, recipe}, index)=>(
         <div className="menu-product-list-item" key={id} onClick={(e)=>{
             if (e.target.classList[1]) {
                 e.target.classList.remove('selected');    
@@ -45,12 +47,22 @@ const ProductList = () => {
             <img src={image} alt="product image" className="menu-product-list-item-image no-event"></img>
             <div className="menu-product-list-item-name no-event">{name}</div>
             <div className="menu-product-list-item-volume no-event">250 мл</div>
-            <div className="menu-product-list-item-consist no-event">-</div>
+            <div className="menu-product-list-item-consist no-event">{
+                recipe.map((item, index)=>{
+                    if (index < 4) return <p style={{margin: '0px'}} key={index}>{`${item.name}, `}</p>;
+                })
+            }</div>
             <div className="menu-product-list-item-price no-event">{price} c</div>
+            <div className="product-item-options">
+
+            </div>
         </div>
     ));
     return (
         <>
+            {/* {newDish &&
+            <NewDish></NewDish>} */}
+            {/* <NewDish></NewDish> */}
             <div className="menu-filter-block">
                 <div className="menu-filter-search">
                     <Search handleFilterByName={handleFilterByName}></Search>

@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { setLogin } from '../redux/actions/productActions';
+import { setToken } from '../redux/actions/productActions';
+import notification_logo from './media/notification-logo.svg';
+import SignOutLogo from './media/SignOut.svg';
 import logo from './media/neocafe.svg';
 import './main.css';
 import { Redirect, Link } from 'react-router-dom';
@@ -9,6 +11,7 @@ import { Redirect, Link } from 'react-router-dom';
 
 const Main = () => {
     const [page, setPage] = useState('menu');
+    const dispatch = useDispatch()
     if (window.location.pathname == '/') {
         return (<Redirect to="/menu" />)
     }
@@ -45,6 +48,14 @@ const Main = () => {
                 }}>
                     Сотрудники
                 </Link>
+            </div>
+            <div className="header_extra-options">
+                <img src={notification_logo} alt="notifications" className="header_notification-logo"/>
+                <img src={SignOutLogo} alt="Sign out" className="header_signout-logo" onClick={()=>{
+                    localStorage.clear();
+                    dispatch(setToken(false));
+                    window.location = '/';
+                }}/>
             </div>
         </div>
     )

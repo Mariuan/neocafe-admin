@@ -16,6 +16,7 @@ import notification_logo from './components/media/notification-logo.svg';
 import SignOutLogo from './components/media/SignOut.svg';
 import LoginCheck from './components/LoginCheck';
 import { setToken } from './redux/actions/productActions';
+import EditDish from './components/pages/EditDish';
 
 function App() {
   const dispatch = useDispatch()
@@ -50,7 +51,8 @@ function App() {
       <>
         <Route path="/" component={Main}/>
         <Switch>
-          <Route path="/menu" component={Menu}/>
+          <Route path="/menu/" component={Menu} />
+          <Route path="/menu/:id" component={EditDish}/>
           <Route path="/store" component={Store}/>
           <Route path="/branches" component={Branches}/>
           <Route path="/employees" component={Employees}/>

@@ -3,8 +3,9 @@ import './menu.css';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setProducts, setCategories, setDishes } from '../../redux/actions/productActions';
-import { useHistory } from 'react-router';
+import { Route, Switch } from 'react-router-dom';
 import ProductList from './components/ProductList';
+import NewDish from './components/NewDish';
 
 
 
@@ -13,7 +14,7 @@ const Menu = () => {
     
     
     const fetchDishes = async () => {
-        axios.get('https://neocafe6.herokuapp.com/dishes').catch((err)=>console.log(err)).then((res)=>dispatch(setDishes(res.data)));
+        axios.get('https://neocafe6.herokuapp.com/dishes/detailed').catch((err)=>console.log(err)).then((res)=>dispatch(setDishes(res.data)));
     }
 
     const fetchCategories = async () => {
@@ -30,7 +31,10 @@ const Menu = () => {
     }, 500);
     return (
         <div className="menu">
-            <ProductList></ProductList>
+            <Switch>
+                <ProductList></ProductList>
+            </Switch>
+            
         </div>
     )
 }

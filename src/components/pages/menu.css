@@ -1,6 +1,7 @@
 .menu {
     width: 95%;
     margin: auto;
+    position: relative;
 }
 
 .menu-filter-block {
