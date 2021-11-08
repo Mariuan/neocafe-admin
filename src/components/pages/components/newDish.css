@@ -1,6 +1,6 @@
 .new-dish-back {
     position: absolute;
-    top: -1%;
+    top: 80px;
     left: 0;
     width: 100%;
     height: 100%;
@@ -9,20 +9,21 @@
 }
 
 .new-dish-content {
-    width: 25%;
+    width: 30%;
     height: 100%;
+    margin-left: 50px;
 }
 
-.new-dish-content input,
-.new-dish-content select {
+.input {
     margin: 10px 0;
     padding: 15px 6px;
     border: 1px solid #DDDCDC;
     border-radius: 10px;
+    outline: none;
 }
 
 .new-dish-image-window {
-    width: 460px;
+    width: 95%;
     height: 170px;
     background: #FCFCFD;
     display: flex;
@@ -47,7 +48,64 @@
 }
 
 .dish-name-input {
-    width: 460px;
+    width: 92%;
     font-size: 14px;
     outline: none;
+}
+
+.dish-price-input {
+    width: 43.5%;
+    margin-right: 11px;
+}
+
+.new-dish-category {
+    width: 43%;
+    margin-left: 15px;
+}
+
+.dish-quantity-input {
+    width: 43%;
+    margin-right: 15px;
+}
+
+.new-dish-add-more-button {
+    width: 94%;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+    border: none;
+    margin: 30px 0;
+    background: #2A58AD;
+    color: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.new-dish-save-button {
+    width: 45%;
+    padding: 20px;
+    text-align: center;
+    margin: 10px 11px 46px 0;
+    border: 1px solid #28C8A2;
+    border-radius: 10px;
+    background: #28C8A2;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.new-dish-cancel-button {
+    width: 45%;
+    margin: 10px 0 46px 11px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #2A58AD;
+    border-radius: 10px;
+    color: #2A58AD;
+    background: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
 }

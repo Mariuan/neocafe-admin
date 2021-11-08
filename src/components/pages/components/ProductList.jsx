@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import Search from '../components/Search';
 import AddButton from '../../media/AddButton.svg';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 import '../menu.css';
 import NewDish from './NewDish';
 
@@ -81,7 +81,7 @@ const ProductList = () => {
                     </select>
                 </div>
                 <div className="menu-filter-other-options">
-                    <img src={AddButton} alt="add button" className="menu-filter-add-button"/>
+                    <img src={AddButton} alt="add button" className="menu-filter-add-button" onClick={(e)=>window.location = "/menu/new-dish"}/>
                 </div>
             </div>
             <div className="menu-product-list">

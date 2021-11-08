@@ -1,20 +1,26 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useSelector } from 'react-redux';
 import coffee_icon from '../../media/Coffee.svg';
 import './newDish.css';
 
 const NewDish = () => {
     const state = useSelector((state)=>state);
+    const [consistAmount, setConsistAmount] = useState(1);
+    const [ consists, setConsists] = useState([]);
+    let arrConsist = [];
+    for (let i = 0; i < consistAmount; i++) {
+        arrConsist.push(i);
+    }
     const ConsistForm = () => (
         <>
             <input type="text" 
-            className="dish-name-input" 
+            className="dish-name-input input" 
             placeholder="Ингридиент"/>
             <input type="text" 
-            className="dish-quantity-input"
+            className="dish-quantity-input input"
             placeholder="Количество"/>
-            <select defaultValue={-1}>
-                <option value={-1}>г, мл</option>
+            <select className="new-dish-category input" defaultValue={-1}>
+                <option value={-1} disabled hidden>г, мл</option>
                 <option value={0}>Г</option>
                 <option value={1}>Мл</option>
             </select>
@@ -37,22 +43,24 @@ const NewDish = () => {
                     </div>
                 </div>
                 <input type="text" 
-                    className="dish-name-input"
+                    className="input dish-name-input"
                     placeholder="Наименование блюда" 
                     required/>
-                    <input className="dish-price-input"
+                    <input className="input dish-price-input"
                     placeholder="Стоимость блюда"/>
-                    <select defaultValue={-1}>
+                    <select className="new-dish-category input" defaultValue={-1}>
                         <option value={-1}>Категория</option>
                         {state.allProducts.categories.map((item)=>(
                             <option key={item.id} value={item.id}>{item.name}</option>
                         ))}
                     </select>
                     <h1 className="new-dish-subtitle">Состав блюда</h1>
-                    <ConsistForm />
-                    <button type="button" className="new-dish-add-more-button">Добавить ещё</button>
+                    {arrConsist.map((item)=>(<ConsistForm key={item} />))}
+                    <button type="button" className="new-dish-add-more-button" onClick={(e)=>{
+                        setConsistAmount(consistAmount+1);
+                    }}>Добавить ещё</button>
                     <button type="submit" className="new-dish-save-button">Сохранить</button>
-                    <button type="button" className="new-dish-cancel-button">Отменить</button>
+                    <button type="button" className="new-dish-cancel-button" onClick={()=>window.location = "/menu"}>Отменить</button>
             </div>
         </div>
     )

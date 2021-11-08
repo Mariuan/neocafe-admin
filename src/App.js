@@ -17,6 +17,7 @@ import SignOutLogo from './components/media/SignOut.svg';
 import LoginCheck from './components/LoginCheck';
 import { setToken } from './redux/actions/productActions';
 import EditDish from './components/pages/EditDish';
+import NewDish from './components/pages/components/NewDish';
 
 function App() {
   const dispatch = useDispatch()
@@ -51,7 +52,8 @@ function App() {
       <>
         <Route path="/" component={Main}/>
         <Switch>
-          <Route path="/menu/" component={Menu} />
+          <Route exact path="/menu" component={Menu} />
+          <Route exact path="/menu/new-dish" component={NewDish}/>
           <Route path="/menu/:id" component={EditDish}/>
           <Route path="/store" component={Store}/>
           <Route path="/branches" component={Branches}/>
