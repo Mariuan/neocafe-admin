@@ -22,7 +22,8 @@ const NewDish = () => {
     const state = useSelector((state)=>state);
     const [consistAmount, setConsistAmount] = useState(1);
     const [dishData ,setDishData] = useState({name: null, price: null, category: null, image: null, recipe: []})
-    let consists = [{name: null, quantity: null, unit: null}]
+    const [consists, setConsists] = useState([{name: null, quantity: null, unit: null}])
+    const [ image, setImage] = useState();
     let arrConsist = [];
     for (let i = 0; i < consistAmount; i++) {
         arrConsist.push(i);
@@ -36,10 +37,26 @@ const NewDish = () => {
         })
 
     }, [])
-    console.log(dishData);
-    console.log(consists);
+    console.log(image);
     const handleSubmit = () => {
-        
+        axios.get('https://neocafe6.herokuapp.com/dishes').then((res)=>console.log(res));
+        axios.post('https://neocafe6.herokuapp.com/dishes', {
+            name: dishData.name,
+            price: dishData.price,
+            category: dishData.category,
+            image: image,
+            recipe: consists
+        }).catch((err)=>console.log(err));
+        // axios.post('https://neocafe6.herokuapp.com/dishes', {
+        //     name: dishData.name,
+        //     price: dishData.price,
+        //     category: dishData.category,
+        //     image: image,
+        //     recipe: consists
+        // },
+        // {
+        //     headers: `Bearer ${localStorage.getItem('neo-cafe-admin-token')}`
+        // })
     }
     return (
         <div className="new-dish-back">
@@ -54,7 +71,11 @@ const NewDish = () => {
                             }}>Добавить картинку</p>
                             <input type="file" 
                             accept="image/png, image/svg, image/jpeg, image/png" 
-                            className="image-input"/>
+                            name="image"
+                            className="image-input"
+                            onChange={(e)=>{
+                                setImage(e.target.files[0]);
+                            }}/>
                     </div>
                 </div>
                 <input type="text" 
@@ -85,22 +106,35 @@ const NewDish = () => {
                         <div key={item.id}>
                             <select className="dish-name-input input"
                             onChange={(e)=>{
-                                consists[index].name = state.allProducts.store[index].name;
+                                if (e.target.value != -1) {
+                                    e.target.style.color = "#000";
+                                }
+                                let temp = consists;
+                                temp[index].name = state.allProducts.store[parseInt(e.target.value)].name;
+                                console.log(temp);
+                                setConsists(temp);
                             }}>
-                                <option value={-1}>Ингридиент</option>
+                                <option value={-1} disabled hidden>Ингридиент</option>
                                 {state.allProducts.store.map((item, index)=>(
                                     <option key={item.id} value={index}>{item.name}</option>
                                 ))}
                             </select>
                             <input type="text" 
                             className="dish-quantity-input input"
-                            placeholder="Количество"/>
+                            placeholder="Количество"
+                            onChange={(e)=>{
+                                const temp = consists;
+                                temp[index].quantity = parseInt(e.target.value);
+                                setConsists(temp);
+                            }}/>
                             <select className="new-dish-category input" defaultValue={-1}
                             onChange={(e)=>{
                                 if (e.target.value != -1) {
                                     e.target.style.color = "#000";
                                 }
-                                
+                                const temp = consists;
+                                if (e.target.value == 0) consists[index].unit = 'Г'
+                                else if (e.target.value == 1) consists[index].unit = 'Мл'
                             }}>
                                 <option value={-1} disabled hidden>г, мл</option>
                                 <option value={0}>Г</option>
@@ -110,10 +144,10 @@ const NewDish = () => {
                     ))}
                     <button type="button" className="new-dish-add-more-button" onClick={(e)=>{
                         setConsistAmount(consistAmount+1);
-                        consists = [...consists, {name: null, quantity: null, unit: null}];
+                        setConsists([...consists, {name: null, quantity: null, unit: null}]);
                         console.log(consists);
                     }}>Добавить ещё</button>
-                    <button type="submit" className="new-dish-save-button">Сохранить</button>
+                    <button type="submit" className="new-dish-save-button" onClick={handleSubmit}>Сохранить</button>
                     <button type="button" className="new-dish-cancel-button" onClick={()=>window.location = "/menu"}>Отменить</button>
             </div>
         </div>

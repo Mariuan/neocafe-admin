@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { setProducts, setCategories, setDishes } from '../../redux/actions/productActions';
 import { Route, Switch } from 'react-router-dom';
 import ProductList from './components/ProductList';
-import NewDish from './components/NewDish';
 
 
 

@@ -81,7 +81,10 @@ const ProductList = () => {
                     </select>
                 </div>
                 <div className="menu-filter-other-options">
-                    <img src={AddButton} alt="add button" className="menu-filter-add-button" onClick={(e)=>window.location = "/menu/new-dish"}/>
+                    <a href="/menu/new-dish" className="menu-filter-add-button">
+                    <img src={AddButton} alt="add button" className="menu-filter-add-button"/>
+                    </a>
+                    
                 </div>
             </div>
             <div className="menu-product-list">
