@@ -18,6 +18,7 @@ import LoginCheck from './components/LoginCheck';
 import { setToken } from './redux/actions/productActions';
 import EditDish from './components/pages/EditDish';
 import NewDish from './components/pages/components/NewDish';
+import NewProduct from './components/pages/components/NewProduct';
 
 function App() {
   const dispatch = useDispatch()
@@ -55,7 +56,8 @@ function App() {
           <Route exact path="/menu" component={Menu} />
           <Route exact path="/menu/new-dish" component={NewDish}/>
           <Route path="/menu/:id" component={EditDish}/>
-          <Route path="/store" component={Store}/>
+          <Route exact path="/store" component={Store}/>
+          <Route exact path="/store/new-product" component={NewProduct}/>
           <Route path="/branches" component={Branches}/>
           <Route path="/employees" component={Employees}/>
         </Switch>

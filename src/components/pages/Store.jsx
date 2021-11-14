@@ -77,7 +77,9 @@ const Store = () => {
                     </select>
                 </div>
                 <div className="store-filter-extra-options">
+                    <a href="/store/new-product">
                     <img src={AddButton} alt="add new employees button" className="store-filter-add-button" />
+                    </a>
                 </div>
             </div>
             <div className="store-products-list-title">

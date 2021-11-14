@@ -22,7 +22,7 @@ const NewDish = () => {
     const state = useSelector((state)=>state);
     const [consistAmount, setConsistAmount] = useState(1);
     const [dishData ,setDishData] = useState({name: null, price: null, category: null, image: null, recipe: []})
-    const [consists, setConsists] = useState([{name: null, quantity: null, unit: null}])
+    const [consists, setConsists] = useState([{product: null, quantity: null}])
     const [ image, setImage] = useState();
     let arrConsist = [];
     for (let i = 0; i < consistAmount; i++) {
@@ -39,24 +39,12 @@ const NewDish = () => {
     }, [])
     console.log(image);
     const handleSubmit = () => {
-        axios.get('https://neocafe6.herokuapp.com/dishes').then((res)=>console.log(res));
-        axios.post('https://neocafe6.herokuapp.com/dishes', {
-            name: dishData.name,
-            price: dishData.price,
-            category: dishData.category,
-            image: image,
-            recipe: consists
-        }).catch((err)=>console.log(err));
-        // axios.post('https://neocafe6.herokuapp.com/dishes', {
-        //     name: dishData.name,
-        //     price: dishData.price,
-        //     category: dishData.category,
-        //     image: image,
-        //     recipe: consists
-        // },
-        // {
-        //     headers: `Bearer ${localStorage.getItem('neo-cafe-admin-token')}`
-        // })
+        let data = new FormData();
+        data.append("name", dishData.name);
+        data.append("price", dishData.price);
+        data.append("category", dishData.category);
+        data.append("image", image);
+        axios.post('https://neocafe6.herokuapp.com/dishes', data).catch((err)=>console.log(err));
     }
     return (
         <div className="new-dish-back">
@@ -110,7 +98,7 @@ const NewDish = () => {
                                     e.target.style.color = "#000";
                                 }
                                 let temp = consists;
-                                temp[index].name = state.allProducts.store[parseInt(e.target.value)].name;
+                                temp[index].product = state.allProducts.store[parseInt(e.target.value)].id;
                                 console.log(temp);
                                 setConsists(temp);
                             }}>

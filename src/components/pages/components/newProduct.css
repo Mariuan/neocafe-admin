@@ -1,0 +1,19 @@
+.new-product-page {
+    position: absolute;
+    top: 80px;
+    width: 100%;
+}
+
+.new-product-content {
+    width: 30%;
+    margin-left: 50px;
+}
+
+.new-product-page select {
+    box-sizing: content-box;
+}
+
+.new-product-name {
+    width: 95%;
+    padding: 20px 6px;
+}
