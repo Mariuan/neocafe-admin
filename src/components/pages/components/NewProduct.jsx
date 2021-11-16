@@ -22,6 +22,19 @@ const NewProduct = () => {
     useEffect(() => {
         fetchCategories().then((res)=>dispatch(setCategories(res)));
     }, [])
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        axios.post('https://neocafe6.herokuapp.com/products', {
+            name: name,
+            unit: type,
+            min: limit,
+            // reserve:number,
+            // date:string,
+        }).catch((err)=>console.log(err)).then((res)=>{
+            window.location = '/store';
+        })
+    }
     return (
         <div className="new-product-page">
             <div className="new-product-content">
@@ -68,6 +81,15 @@ const NewProduct = () => {
                 onChange={(e)=>{
                     setLimit(parseInt(e.target.value));
                 }}/>
+                <br/>
+                <button 
+                type="submit"
+                className="new-product-save-button"
+                onClick={handleSubmit}>Сохранить</button>
+                <button 
+                type='button'
+                className="new-product-cancel-button"
+                onClick={()=>window.location='/store'}>Отменить</button>
             </div>
         </div>
     )

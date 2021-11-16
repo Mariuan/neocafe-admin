@@ -33,7 +33,7 @@ const ProductList = () => {
                 }
             }
         }
-    }).map(({id, name, description, price, image, recipe}, index)=>(
+    }).map(({id, name, description, price, image, recipe, volume}, index)=>(
         <div className="menu-product-list-item" key={id} onClick={(e)=>{
             if (e.target.classList[1]) {
                 e.target.classList.remove('selected');    
@@ -46,10 +46,12 @@ const ProductList = () => {
             <div className="menu-product-list-item-number no-event">{index+1}</div>
             <img src={image} alt="product image" className="menu-product-list-item-image no-event"></img>
             <div className="menu-product-list-item-name no-event">{name}</div>
-            <div className="menu-product-list-item-volume no-event">250 мл</div>
+            <div className="menu-product-list-item-volume no-event">{volume}</div>
             <div className="menu-product-list-item-consist no-event">{
                 recipe.map((item, index)=>{
-                    if (index < 4) return <p style={{margin: '0px'}} key={index}>{`${item.name}, `}</p>;
+                    return (index < 4) && index !== 2 ? <p style={{margin: '0px'}} key={index}>{`${item.name} ${item.quantity} ${item.unit},`}&nbsp;</p> :
+                    (index < 4) && index === 2 ? <p style={{margin: '0px'}} key={index}>{`${item.name} ${item.quantity} ${item.unit}`}&nbsp;</p> :
+                    ''
                 })
             }</div>
             <div className="menu-product-list-item-price no-event">{price} c</div>
@@ -60,9 +62,6 @@ const ProductList = () => {
     ));
     return (
         <>
-            {/* {newDish &&
-            <NewDish></NewDish>} */}
-            {/* <NewDish></NewDish> */}
             <div className="menu-filter-block">
                 <div className="menu-filter-search">
                     <Search handleFilterByName={handleFilterByName}></Search>

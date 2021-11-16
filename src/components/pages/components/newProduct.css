@@ -9,11 +9,111 @@
     margin-left: 50px;
 }
 
+.new-product-content input::placeholder {
+    color: #9e9e9e;
+}
+
 .new-product-page select {
     box-sizing: content-box;
+}
+
+.new-product-title {
+    margin: 43px 0 30px 0;
 }
 
 .new-product-name {
     width: 95%;
     padding: 20px 6px;
+    margin: 10px 0 10px 0;
+    border: 1px solid #DDDCDC;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 400;
+    outline: none;
+}
+
+.new-product-arrive-date {
+    width: 45%;
+    margin: 10px 2.5% 10px 0;
+    padding: 20px 6px;
+    ;
+    border: 1px solid #DDDCDC;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 400;
+    outline: none;
+}
+
+.new-product-quantity {
+    width: 45%;
+    padding: 20px 6px;
+    margin: 10px 2.5% 10px 0;
+    ;
+    border: 1px solid #DDDCDC;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 400;
+    outline: none;
+}
+
+.new-product-limit {
+    width: 45%;
+    padding: 20px 6px;
+    margin: 10px 0;
+    ;
+    border: 1px solid #DDDCDC;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 400;
+    outline: none;
+}
+
+.new-product-category {
+    color: #9e9e9e;
+    width: 45%;
+    padding: 20px 6px;
+    border: 1px solid #DDDCDC;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 400;
+    outline: none;
+}
+
+.new-product-type {
+    color: #9e9e9e;
+    width: 45%;
+    padding: 20px 6px;
+    border: 1px solid #DDDCDC;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 400;
+    outline: none;
+}
+
+.new-product-save-button {
+    width: 47%;
+    margin: 30px 1.5% 30px 0;
+    padding: 20px 0;
+    text-align: center;
+    border-radius: 10px;
+    border: none;
+    background: #28C8A2;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.new-product-cancel-button {
+    width: 47%;
+    margin: 30px 0 30px 2%;
+    padding: 20px 0;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid #2A58AD;
+    background: none;
+    color: #2A58AD;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
 }

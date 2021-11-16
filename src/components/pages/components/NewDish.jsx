@@ -37,13 +37,15 @@ const NewDish = () => {
         })
 
     }, [])
-    console.log(image);
     const handleSubmit = () => {
         let data = new FormData();
         data.append("name", dishData.name);
         data.append("price", dishData.price);
         data.append("category", dishData.category);
         data.append("image", image);
+        for (let i  in consists) {
+            data.append('recipe[]', JSON.stringify(consists[i]));
+        }
         axios.post('https://neocafe6.herokuapp.com/dishes', data).catch((err)=>console.log(err));
     }
     return (

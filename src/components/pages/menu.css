@@ -47,14 +47,14 @@
 
 .menu-product-list-title {
     display: grid;
-    grid-template-columns: 1fr 5fr 3fr 7fr 4fr;
+    grid-template-columns: 1.8fr 5.2fr 3.4fr 8fr 4.6fr;
+    margin-bottom: 10px;
 }
 
 .menu-product-list-title-item {
     font-size: 18px;
     font-weight: 500;
     text-align: start;
-
 }
 
 .menu-product-list-number {
@@ -72,8 +72,8 @@
     padding: 10px 0;
     cursor: pointer;
     border: 1px solid #fff;
-    
 }
+
 .menu-product-list-item-number {
     display: flex;
     justify-content: center;
