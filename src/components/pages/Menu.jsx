@@ -13,7 +13,9 @@ const Menu = () => {
     
     
     const fetchDishes = async () => {
-        axios.get('https://neocafe6.herokuapp.com/dishes/detailed').catch((err)=>console.log(err)).then((res)=>dispatch(setDishes(res.data)));
+        axios.get('https://neocafe6.herokuapp.com/dishes/detailed',{page: 0, limit: 1000}).catch((err)=>console.log(err)).then((res)=>{
+            dispatch(setDishes(res.data));
+        });
     }
 
     const fetchCategories = async () => {
@@ -25,9 +27,6 @@ const Menu = () => {
         fetchDishes();
         fetchCategories();
     }, [])
-    setTimeout(()=>{
-        ;
-    }, 500);
     return (
         <div className="menu">
             <Switch>

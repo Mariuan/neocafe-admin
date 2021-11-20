@@ -24,7 +24,7 @@ export const productReducer = (state = intialState, {type, payload}) => {
         case ActionTypes.SET_PRODUCTS:
             return {...state, store: payload};
         case ActionTypes.SET_DISHES:
-            return {...state, dishes: payload};
+            return {...state, dishes: payload.data};
         case ActionTypes.SET_CATEGORIES:
             return {...state, categories: payload};
         case ActionTypes.SET_EMPLOYEES:

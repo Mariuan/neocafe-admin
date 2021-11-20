@@ -77,7 +77,8 @@ const Employees = () => {
                 </div>
                 <div className="employees-filter-extra-options">
                     <button type="button" className="employees-filter-rating-button">По рейтингу</button>
-                    <img src={AddButton} alt="add new employees button" className="employees-filter-add-button" />
+                    <img src={AddButton} alt="add new employees button" className="employees-filter-add-button"
+                    onClick={()=>window.location = '/employees/new-employee'}/>
                 </div>
             </div>
             <div className="employees-list-title">
