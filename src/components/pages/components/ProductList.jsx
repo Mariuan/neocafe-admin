@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { Link, Route } from 'react-router-dom';
 import '../menu.css';
 import NewDish from './NewDish';
+import axios, { Axios } from 'axios';
 
 const ProductList = () => {
     const [filter, setFilter] = useState('');
@@ -24,10 +25,10 @@ const ProductList = () => {
                 }
             }
         }
-        else if (item.info.name.toLowerCase().includes(filter.toLowerCase())){
+        else if (item.name.toLowerCase().includes(filter.toLowerCase())){
             if (categoryFilter == -1) return item;
             else {
-                if (!item.info.category && item.info.category.id == categoryFilter) {
+                if (!item.category && item.category.id == categoryFilter) {
                     return item;
                 }
             }
@@ -43,27 +44,47 @@ const ProductList = () => {
             
         }}>
             <div className="menu-product-list-item-number no-event">{index+1}</div>
-            <img src={item.info.image} alt="product image" className="menu-product-list-item-image no-event"></img>
-            <div className="menu-product-list-item-name no-event">{item.info.name}</div>
+            <img src={item.image} alt="product image" className="menu-product-list-item-image no-event"></img>
+            <div className="menu-product-list-item-name no-event">{item.name}</div>
             <div className="menu-product-list-item-volume no-event">{item.volume}</div>
             <div className="menu-product-list-item-consist no-event">{
-                item.info.recipe.map((item, index)=>{
+                item.recipe.map((item, index)=>{
                     return (index < 4) && index !== 2 ? <p style={{margin: '0px'}} key={index}>{`${item.name} ${item.quantity} ${item.unit},`}&nbsp;</p> :
                     (index < 4) && index === 2 ? <p style={{margin: '0px'}} key={index}>{`${item.name} ${item.quantity} ${item.unit}`}&nbsp;</p> :
                     ''
                 })
             }</div>
-            <div className="menu-product-list-item-price no-event">{item.info.price} c</div>
+            <div className="menu-product-list-item-price no-event">{item.price} c</div>
             <div className="product-item-options"
             onClick={(e)=>{
                 e.stopPropagation();
-                e.target.childNodes[0].display = 'block';
-                console.log(e.target.childNodes);
+                if (e.target.childNodes[0].style.display != 'block') {
+                    e.target.childNodes[0].style.display = 'block';
+                    e.target.childNodes[1].style.display = 'block';
+                }
+                
+                console.log(e.target.childNodes[0]);
             }}>
-                <div className="product-item-actions">
-                    <p className="product-item-actions-list">Удалить</p>
-                    <p className="product-item-actions-list">Редактировать</p>
+                <div className="product-item-actions-frame"
+                onClick={(e)=>{
+                    e.stopPropagation();
+                    e.target.nextSibling.style.display = 'none';
+                    e.target.style.display = 'none';
+                    }}> 
                 </div>
+                <div className="product-item-actions">
+                        <p 
+                        className="product-item-actions-list"
+                        onClick={(e)=>{
+                            e.stopPropagation();
+                            axios.delete(`https://neocafe6.herokuapp.com/dishes/${item.id}`).then((res)=>{
+                                console.log(res);
+                                if (res.status == 200) e.target.parentNode.parentNode.parentNode.remove();
+                            });
+                            
+                        }}>Удалить</p>
+                        <p className="product-item-actions-list">Редактировать</p>
+                    </div>
                 <p className="dots no-event">.</p>
                 <p className="dots no-event">.</p>
                 <p className="dots no-event">.</p>
