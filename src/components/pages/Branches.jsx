@@ -9,15 +9,18 @@ import { setBranches } from '../../redux/actions/productActions';
 
 const fetchBranches = async () => {
     const response = await axios.get('https://neocafe6.herokuapp.com/branches');
-    console.log(await response.data);
     return await response.data;
 }
 
 const Branches = () => {
     const dispatch = useDispatch();
     const [ filterByName, setFilterByName] = useState('');
+    const [deleteBranch, setDeleteBranch] = useState(null);
     const handleFilterByName = (e) => {
         setFilterByName(e.target.value);
+    }
+    const handleRemove = (e)=>{
+        e.target.parentNode.parentNode.parentNode.parentNode.remove();
     }
     const products = useSelector((state)=>state);
     const renderList = products.allProducts.branches;
@@ -26,12 +29,35 @@ const Branches = () => {
     }, [])
     return (
         <div className="branches">
+            { deleteBranch != null && 
+            <div className="branch-delete-frame">
+                <div className="branch-delete-window">
+                    <div className="branch-delete-title">Вы правда хотите удалить филиал <b>«{deleteBranch.name}»</b></div>
+                    <div className="branch-delete-button-box">
+                        <button 
+                        type="button" 
+                        className="branch-delete-confirm-button"
+                        onClick={()=>{
+                            deleteBranch.forEach((item)=>{
+                                item.removeBranchElement();
+                            });
+                            setDeleteBranch(null);
+                        }}>Да</button>
+                        <button 
+                        type="button" 
+                        className="branch-delete-reject-button"
+                        onClick={()=>setDeleteBranch(null)}>Нет</button>
+                    </div>
+                </div>
+            </div>}
             <div className="branches-filter-block">
                 <div className="branches-filter-search">
                     <Search handleFilterByName={handleFilterByName}></Search>
                 </div>
                 <div className="branches-filter-extra-options">
-                    <img src={AddButton} alt="add new employees button" className="branches-filter-add-button" />
+                    <a href="/branches/new-branch">
+                        <img src={AddButton} alt="add new employees button" className="branches-filter-add-button" />
+                    </a>
                 </div>
             </div>
             <div className="branches-card-list">
@@ -65,9 +91,10 @@ const Branches = () => {
                                 }}>...</p>
                                 <div className="card-options-open-window">
                                     <p className="option-open-window-button" onClick={(e)=>{
-                                        axios.delete(`https://neocafe6.herokuapp.com/branches/${id}`).then((res)=>{
-                                            if (res.status == 200) e.target.parentNode.parentNode.parentNode.parentNode.remove();
-                                        })
+                                        setDeleteBranch({id: id, name: name, removeBranchElement: (e)=>{e.target.parentNode.parentNode.parentNode.parentNode.remove()}});
+                                        // axios.delete(`https://neocafe6.herokuapp.com/branches/${id}`).then((res)=>{
+                                        //     if (res.status == 200) 
+                                        // })
                                     }}>Удалить</p>
                                     <p className="option-open-window-button">Редактировать</p>
                                 </div>
