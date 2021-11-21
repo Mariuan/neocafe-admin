@@ -1,9 +1,17 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Search from './components/Search';
 import AddButton from '../media/AddButton.svg';
 import './branches.css';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+import axios from 'axios';
+import { setBranches } from '../../redux/actions/productActions';
+
+const fetchBranches = async () => {
+    const response = await axios.get('https://neocafe6.herokuapp.com/branches');
+    console.log(await response.data);
+    return await response.data;
+}
 
 const Branches = () => {
     const dispatch = useDispatch();
@@ -13,6 +21,9 @@ const Branches = () => {
     }
     const products = useSelector((state)=>state);
     const renderList = products.allProducts.branches;
+    useEffect(()=>{
+        fetchBranches().then((res)=>dispatch(setBranches(res)));
+    }, [])
     return (
         <div className="branches">
             <div className="branches-filter-block">
@@ -29,7 +40,7 @@ const Branches = () => {
                     else {
                         if (item.name.toLowerCase().includes(filterByName.toLowerCase())) return item;
                     }
-                }).map(({id, name, address, schedule, phone})=>(
+                }).map(({id, name, address, opening_hours, phone})=>(
                     <div key={id} className="branches-card-list-item">
                         <h1 className="branches-card-title">{name}</h1>
                         <p className="branches-card-subtitle">Адрес:</p>
@@ -37,9 +48,10 @@ const Branches = () => {
                         <p className="branches-card-subtitle">Телефон:</p>
                         <p className="branches-card-description">{phone}</p>
                         <p className="branches-card-subtitle">График работы:</p>
-                        <p className="branches-card-description">{schedule[0]}</p>
-                        <p className="branches-card-description">{schedule[1]}</p>
-                        <p className="branches-card-description">{schedule[2]}</p>
+                        {opening_hours.split('#').map((item, index)=>(
+                            <p key={index} className="branches-card-description">{item}</p>
+                        ))}
+                        <p className="branches-card-description">{}</p>
                         <div className="branches-card-options">
                             <div className="card-options-close-extra-window" onClick={(e)=>{
                                 e.target.nextSibling.childNodes[1].style.display = "none";
@@ -53,7 +65,9 @@ const Branches = () => {
                                 }}>...</p>
                                 <div className="card-options-open-window">
                                     <p className="option-open-window-button" onClick={(e)=>{
-                                        e.target.parentNode.parentNode.parentNode.parentNode.remove();
+                                        axios.delete(`https://neocafe6.herokuapp.com/branches/${id}`).then((res)=>{
+                                            if (res.status == 200) e.target.parentNode.parentNode.parentNode.parentNode.remove();
+                                        })
                                     }}>Удалить</p>
                                     <p className="option-open-window-button">Редактировать</p>
                                 </div>

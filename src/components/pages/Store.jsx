@@ -24,7 +24,7 @@ const Store = () => {
     }
 
     useEffect(() => {
-        fethcProducts().then((res)=>dispatch(setProducts(res)));
+        fethcProducts().then((res)=>dispatch(setProducts(res.data)));
         
     }, [])
 

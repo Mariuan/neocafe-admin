@@ -14,6 +14,13 @@ export const setDishes = (dishes) => {
     }
 }
 
+export const setBranches = (dishes) => {
+    return {
+        type: "SET_BRANCHES",
+        payload: dishes,
+    }
+}
+
 export const setCategories = (categories) => {
     return {
         type: "SET_CATEGORIES",

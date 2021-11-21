@@ -20,6 +20,7 @@ import EditDish from './components/pages/EditDish';
 import NewDish from './components/pages/components/NewDish';
 import NewProduct from './components/pages/components/NewProduct';
 import NewEmployee from './components/pages/components/NewEmployee';
+import NewBranch from './components/pages/components/NewBranch';
 
 function App() {
   const dispatch = useDispatch()
@@ -59,7 +60,8 @@ function App() {
           <Route path="/menu/:id" component={EditDish}/>
           <Route exact path="/store" component={Store}/>
           <Route exact path="/store/new-product" component={NewProduct}/>
-          <Route path="/branches" component={Branches}/>
+          <Route exact path="/branches" component={Branches}/>
+          <Route exact path="/branches/new-branch" component={NewBranch}></Route>
           <Route exact path="/employees" component={Employees}/>
           <Route exact path="/employees/new-employee" component={NewEmployee}></Route>
         </Switch>

@@ -8,12 +8,12 @@ const intialState = {
     employees: [],
     store: [],
     branches: [
-        {id: 0, name: 'NeoCafe №1', phone: "+996(709)456-345", address: 'Улица Байтик Баатыра 134/3', schedule: ['Пн-Пт с 09:00 до 22:00', 'Ср с 10:00 до 21:00', 'Сб-Вс с 09:00 до 22:00']},
-        {id: 1, name: 'NeoCafe №2', phone: "+996(709)456-345", address: 'Улица Байтик Баатыра 134/3', schedule: ['Пн-Пт с 09:00 до 22:00', 'Ср с 10:00 до 21:00', 'Сб-Вс с 09:00 до 22:00']},
-        {id: 2, name: 'NeoCafe №3', phone: "+996(709)456-345", address: 'Улица Байтик Баатыра 134/3', schedule: ['Пн-Пт с 09:00 до 22:00', 'Ср с 10:00 до 21:00', 'Сб-Вс с 09:00 до 22:00']},
-        {id: 3, name: 'NeoCafe №4', phone: "+996(709)456-345", address: 'Улица Байтик Баатыра 134/3', schedule: ['Пн-Пт с 09:00 до 22:00', 'Ср с 10:00 до 21:00', 'Сб-Вс с 09:00 до 22:00']},
-        {id: 4, name: 'NeoCafe №5', phone: "+996(709)456-345", address: 'Улица Байтик Баатыра 134/3', schedule: ['Пн-Пт с 09:00 до 22:00', 'Ср с 10:00 до 21:00', 'Сб-Вс с 09:00 до 22:00']},
-        {id: 5, name: 'NeoCafe №6', phone: "+996(709)456-345", address: 'Улица Байтик Баатыра 134/3', schedule: ['Пн-Пт с 09:00 до 22:00', 'Ср с 10:00 до 21:00', 'Сб-Вс с 09:00 до 22:00']},
+        // {id: 0, name: 'NeoCafe №1', phone: "+996(709)456-345", address: 'Улица Байтик Баатыра 134/3', schedule: ['Пн-Пт с 09:00 до 22:00', 'Ср с 10:00 до 21:00', 'Сб-Вс с 09:00 до 22:00']},
+        // {id: 1, name: 'NeoCafe №2', phone: "+996(709)456-345", address: 'Улица Байтик Баатыра 134/3', schedule: ['Пн-Пт с 09:00 до 22:00', 'Ср с 10:00 до 21:00', 'Сб-Вс с 09:00 до 22:00']},
+        // {id: 2, name: 'NeoCafe №3', phone: "+996(709)456-345", address: 'Улица Байтик Баатыра 134/3', schedule: ['Пн-Пт с 09:00 до 22:00', 'Ср с 10:00 до 21:00', 'Сб-Вс с 09:00 до 22:00']},
+        // {id: 3, name: 'NeoCafe №4', phone: "+996(709)456-345", address: 'Улица Байтик Баатыра 134/3', schedule: ['Пн-Пт с 09:00 до 22:00', 'Ср с 10:00 до 21:00', 'Сб-Вс с 09:00 до 22:00']},
+        // {id: 4, name: 'NeoCafe №5', phone: "+996(709)456-345", address: 'Улица Байтик Баатыра 134/3', schedule: ['Пн-Пт с 09:00 до 22:00', 'Ср с 10:00 до 21:00', 'Сб-Вс с 09:00 до 22:00']},
+        // {id: 5, name: 'NeoCafe №6', phone: "+996(709)456-345", address: 'Улица Байтик Баатыра 134/3', schedule: ['Пн-Пт с 09:00 до 22:00', 'Ср с 10:00 до 21:00', 'Сб-Вс с 09:00 до 22:00']},
     ],
     token: null,
     login: false,
@@ -23,6 +23,8 @@ export const productReducer = (state = intialState, {type, payload}) => {
     switch(type){
         case ActionTypes.SET_PRODUCTS:
             return {...state, store: payload};
+        case ActionTypes.SET_BRANCHES:
+            return {...state, branches: payload};
         case ActionTypes.SET_DISHES:
             return {...state, dishes: payload.data};
         case ActionTypes.SET_CATEGORIES:
