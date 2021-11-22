@@ -15,7 +15,7 @@ const fetchBranches = async () => {
 const Branches = () => {
     const dispatch = useDispatch();
     const [ filterByName, setFilterByName] = useState('');
-    const [deleteBranch, setDeleteBranch] = useState(null);
+    const [deleteBranchData, setDeleteBranchData] = useState(null);
     const handleFilterByName = (e) => {
         setFilterByName(e.target.value);
     }
@@ -29,24 +29,29 @@ const Branches = () => {
     }, [])
     return (
         <div className="branches">
-            { deleteBranch != null && 
-            <div className="branch-delete-frame">
-                <div className="branch-delete-window">
-                    <div className="branch-delete-title">Вы правда хотите удалить филиал <b>«{deleteBranch.name}»</b></div>
-                    <div className="branch-delete-button-box">
-                        <button 
-                        type="button" 
-                        className="branch-delete-confirm-button"
-                        onClick={()=>{
-                            deleteBranch.forEach((item)=>{
-                                item.removeBranchElement();
-                            });
-                            setDeleteBranch(null);
+            {deleteBranchData && 
+            <div className="delete-branch-frame">
+                <div className="delete-branch-underframe">
+                    <div className="delete-branch-window">
+                        <div className="delete-branch-title">Вы правда хотите удалить филиал <b>«{deleteBranchData.name}»?</b></div>
+                        <button
+                        className="delete-branch-confirm-button"
+                        onClick={(e)=>{
+                            e.target.parentNode.style.opacity = '.8';
+                            axios.delete(`https://neocafe6.herokuapp.com/branches/${deleteBranchData.id}`).then((res)=>{
+                                if (res.status == 200) deleteBranchData.element.remove();
+                                setDeleteBranchData(null);
+                                // dispatch(deleteBranch(deleteBranchData.id));
+                                document.body.style.overflow = 'auto';
+                                e.target.parentNode.style.opacity = '1';
+                            })
                         }}>Да</button>
-                        <button 
-                        type="button" 
-                        className="branch-delete-reject-button"
-                        onClick={()=>setDeleteBranch(null)}>Нет</button>
+                        <button
+                        className="delete-branch-reject-button"
+                        onClick={()=>{
+                            setDeleteBranchData(null);
+                            document.body.style.overflow = 'auto';
+                        }}>Нет</button>
                     </div>
                 </div>
             </div>}
@@ -91,10 +96,10 @@ const Branches = () => {
                                 }}>...</p>
                                 <div className="card-options-open-window">
                                     <p className="option-open-window-button" onClick={(e)=>{
-                                        setDeleteBranch({id: id, name: name, removeBranchElement: (e)=>{e.target.parentNode.parentNode.parentNode.parentNode.remove()}});
-                                        // axios.delete(`https://neocafe6.herokuapp.com/branches/${id}`).then((res)=>{
-                                        //     if (res.status == 200) 
-                                        // })
+                                        setDeleteBranchData({id: id, name: name, element: e.target.parentNode.parentNode.parentNode.parentNode});
+                                        e.target.parentNode.parentNode.previousSibling.style.display = 'none';
+                                        e.target.parentNode.style.display = 'none';
+                                        document.body.style.overflow = 'hidden';
                                     }}>Удалить</p>
                                     <p className="option-open-window-button">Редактировать</p>
                                 </div>
