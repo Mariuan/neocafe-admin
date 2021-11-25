@@ -1,7 +1,19 @@
 import React, {useState} from 'react'
 import { useSelector } from 'react-redux';
 import './newEmployee.css';
+
+const weekDays = [
+    {name: 'Понедельник', shortName: 'Пн'},
+    {name: 'Вторник', shortName: 'Вт'},
+    {name: 'Среда', shortName: 'Ср'},
+    {name: 'Четверг', shortName: 'Чт'},
+    {name: 'Пятница', shortName: 'Пт'},
+    {name: 'Суббота', shortName: 'Сб'},
+    {name: 'Воскресенье', shortName: 'Вс'},
+]
+
 const NewEmployee = () => {
+    const state = useSelector((state)=>state);
     const [name, setName] = useState('');
     const [lastname, setLastname] = useState('');
     const [birthday, setBirthday] = useState(null);
@@ -9,16 +21,9 @@ const NewEmployee = () => {
     const [branch, setBranch] = useState(null);
     const [post, setPost] = useState(null);
 
-    const [ schedule, setSchedule] = useState([
-        {day: 0, name: 'Понедельник', start: '', finish: '', work: false},
-        {day: 1, name: 'Вторник', start: '', finish: '', work: false},
-        {day: 2, name: 'Среда', start: '', finish: '', work: false},
-        {day: 3, name: 'Четверг', start: '', finish: '', work: false},
-        {day: 4, name: 'Пятница', start: '', finish: '', work: false},
-        {day: 5, name: 'Суббота', start: '', finish: '', work: false},
-        {day: 6, name: 'Воскресенье', start: '', finish: '', work: false},
-    ])
-    const state = useSelector((state)=>state);
+
+    const [ schedule, setSchedule] = useState(state.allProducts.selectedEmployee.split('#'));
+    console.log(schedule);
 
     const handleSubmit = () => {
     }
@@ -93,9 +98,9 @@ const NewEmployee = () => {
                         <option value={2}>Администратор</option>
                     </select>
                     <h1 className="new-employee-schedule-title">График работы</h1>
-                    {schedule.map((item, index)=>(
+                    {weekDays.map((item, index)=>(
                         <div key={index} className="new-employee-time">
-                            <p className="new-employee-time-title">{item.name}</p>
+                            <p className="new-employee-time-title">{item[0]}</p>
                                 <div className="new-employee-schedule-time">
                                     <p className="new-employee-time-title">с&nbsp;&nbsp;</p>
                                     <input type="text"

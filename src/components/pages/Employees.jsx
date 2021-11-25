@@ -185,9 +185,12 @@ const Employees = () => {
                         <div className="product-item-options"
                         onClick={(e)=>{
                             e.stopPropagation();
-                            if (e.target.childNodes[0].style.display != 'block') {
-                                e.target.childNodes[0].style.display = 'block';
-                                e.target.childNodes[1].style.display = 'block';
+                            if (e.target.childNodes.lenght > 0){
+                                console.log(e.target)
+                                if (e.target.childNodes[0].style.display != 'block') {
+                                    e.target.childNodes[0].style.display = 'block';
+                                    e.target.childNodes[1].style.display = 'block';
+                                }
                             }
                             
                             console.log(e.target.childNodes[0]);
