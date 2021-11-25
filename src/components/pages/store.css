@@ -64,6 +64,10 @@
     cursor: pointer;
 }
 
+.store-products-render-list {
+    margin-top: 20px;
+}
+
 .store-products-list-title {
     display: grid;
     grid-template-columns: 1fr 10fr 5fr 7fr 10fr;
@@ -92,9 +96,11 @@
     text-align: start;
     font-size: 18px;
     font-weight: 500;
-    border: 1px solid #fff;
+    border: 1px solid #fafafa;
+    background: #FCFCFD;
     padding: 20px 0;
     cursor: pointer;
+    margin: 5px 0;
 
 }
 
@@ -117,4 +123,11 @@
 .store-product-list-item-option {
     flex-direction: column;
     line-height: 6px;
+}
+
+.selected {
+    background: #E6EFFE;
+    border: 1px solid #D2E1FF;
+    box-sizing: border-box;
+    border-radius: 8px;
 }

@@ -4,10 +4,13 @@ import AddButton from '../media/AddButton.svg';
 import Search from './components/Search';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { setEmployees } from '../../redux/actions/productActions';
+import { setBranches, setEmployees } from '../../redux/actions/productActions';
+
+
 
 const Employees = () => {
     const dispatch = useDispatch();
+    const state = useSelector((state)=>state);
     // ----------------------------------------------------------------------
     const [filterByName, setFilterByName] = useState('');
     const [filterByBranch, setFilterByBranch] = useState(-1);
@@ -30,10 +33,17 @@ const Employees = () => {
                 "Authorization": `Bearer ${localStorage.getItem('neo-cafe-admin-token')}`
             }
         });
-        dispatch(setEmployees(response.data));
+        dispatch(setEmployees(response.data.data));
     }
+
+    const fetchBranches = async () => {
+        const response = await axios.get('https://neocafe6.herokuapp.com/branches');
+        dispatch(setBranches(response.data));
+    }
+
     useEffect(()=>{
         fetchEmployees();
+        fetchBranches();
     }, [])
 
     // ----------------------------------------------------------------------
@@ -49,19 +59,17 @@ const Employees = () => {
                     <Search handleFilterByName={handleFilterByName}></Search>
                 </div>
                 <div className="employees-filter-select">
-                    <select className="employees-filter-by-branch" defaultValue={-1} onChange={(e)=>{
+                    <select className="employees-filter-by-branch" defaultValue={-2} onChange={(e)=>{
                         setFilterByBranch(parseInt(e.target.value));
                         if (e.target.value != -1) {
                             e.target.style.color = "#000";
                         }
                     }}>
-                        <option value={-1} disabled hidden>Выберите филиал</option>
-                        <option value={0}>NeoCafe №1</option>
-                        <option value={1}>NeoCafe №2</option>
-                        <option value={2}>NeoCafe №3</option>
-                        <option value={3}>NeoCafe №4</option>
-                        <option value={4}>NeoCafe №5</option>
-                        <option value={5}>NeoCafe №6</option>
+                        <option value={-2} disabled hidden>Выберите филиал</option>
+                        <option value={-1}>Все</option>
+                        {state.allProducts.branches.map((item)=>(
+                            <option value={item.id} key={item.id}>{item.name}</option>
+                        ))}
                     </select>
                     <select className="employees-filter-by-position" defaultValue={-1} onChange={(e)=>{
                         setFilterByPosition(parseInt(e.target.value));
@@ -69,7 +77,8 @@ const Employees = () => {
                             e.target.style.color = "#000";
                         }
                     }}>
-                        <option value={-1} disabled hidden>Должность</option>
+                        <option value={-2} disabled hidden>Должность</option>
+                        <option value={-1}>Все</option>
                         <option value={0}>Официант</option>
                         <option value={1}>Бариста</option>
                         <option value={2}>Администратор</option>
@@ -146,6 +155,11 @@ const Employees = () => {
                             }
                         }
                     }
+                }).filter((item)=>{
+                    if (filterByBranch < 0) return item;
+                    else {
+                        if (item.branch == filterByBranch) return item;
+                    }
                 }).map(({phone, firstname, lastname, birthdate, bonus, role, schedule}, index)=>(
                     <div key={index} className="employees-list-item" onClick={(e)=>{
                         if (e.target.classList[1]) {
@@ -168,10 +182,43 @@ const Employees = () => {
                         <div className="employees-list-item-block employees-list-item-phone no-event">+996 {phone}</div>
                         <div className="employees-list-item-block employees-list-item-birthday no-event">{birthdate}</div>
                         <div className="employees-list-item-block employees-list-item-schedule no-event">{schedule}</div>
-                        <div className="employees-list-item-block employees-list-item-options no-event">
-                            <div>.</div>
-                            <div>.</div>
-                            <div>.</div>
+                        <div className="product-item-options"
+                        onClick={(e)=>{
+                            e.stopPropagation();
+                            if (e.target.childNodes[0].style.display != 'block') {
+                                e.target.childNodes[0].style.display = 'block';
+                                e.target.childNodes[1].style.display = 'block';
+                            }
+                            
+                            console.log(e.target.childNodes[0]);
+                        }}>
+                            <div className="product-item-actions-frame"
+                            onClick={(e)=>{
+                                e.stopPropagation();
+                                e.target.nextSibling.style.display = 'none';
+                                e.target.style.display = 'none';
+                                }}> 
+                            </div>
+                            <div className="product-item-actions">
+                                    <p 
+                                    className="product-item-actions-list"
+                                    onClick={(e)=>{
+                                        e.stopPropagation();
+                                        axios.delete(`https://neocafe6.herokuapp.com/users/${phone}`,{
+                                            headers: {
+                                                "Authorization": `Bearer ${localStorage.getItem('neo-cafe-admin-token')}`
+                                            }
+                                        }).then((res)=>{
+                                            console.log(res);
+                                            if (res.status == 200) e.target.parentNode.parentNode.parentNode.remove();
+                                        });
+                                        
+                                    }}>Удалить</p>
+                                    <p className="product-item-actions-list">Редактировать</p>
+                                </div>
+                            <p className="dots no-event">.</p>
+                            <p className="dots no-event">.</p>
+                            <p className="dots no-event">.</p>
                         </div>
                     </div>
                 ))}

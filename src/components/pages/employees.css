@@ -72,12 +72,17 @@
     font-weight: 500;
 }
 
+.employees-list-items {
+    margin-top: 20px;
+}
+
 .employees-list-item {
     display: grid;
     grid-template-columns: 0.5fr 4.5fr 2fr 3fr 3fr 4.5fr .5fr;
     line-height: 20px;
     padding: 20px 10px;
-    border: 1px solid #fff;
+    border: 1px solid #fafafa;
+    background: #FCFCFD;
     margin: 5px 0;
     cursor: pointer;
     font-size: 18xp;
@@ -100,4 +105,11 @@
 .employees-list-item-options {
     flex-direction: column;
     line-height: 6px;
+}
+
+.selected {
+    background: #E6EFFE;
+    border: 1px solid #D2E1FF;
+    box-sizing: border-box;
+    border-radius: 8px;
 }

@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setBranches } from '../../redux/actions/productActions';
+import EditBranch from './components/EditBranch';
+
 
 const fetchBranches = async () => {
     const response = await axios.get('https://neocafe6.herokuapp.com/branches');
@@ -101,7 +103,8 @@ const Branches = () => {
                                         e.target.parentNode.style.display = 'none';
                                         document.body.style.overflow = 'hidden';
                                     }}>Удалить</p>
-                                    <p className="option-open-window-button">Редактировать</p>
+                                    <p className="option-open-window-button"
+                                    onClick={(e)=>window.location = `/branches/${id}`}>Редактировать</p>
                                 </div>
                             </div>
                             

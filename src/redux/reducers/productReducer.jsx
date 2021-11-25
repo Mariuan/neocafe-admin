@@ -15,6 +15,9 @@ const intialState = {
         // {id: 4, name: 'NeoCafe №5', phone: "+996(709)456-345", address: 'Улица Байтик Баатыра 134/3', schedule: ['Пн-Пт с 09:00 до 22:00', 'Ср с 10:00 до 21:00', 'Сб-Вс с 09:00 до 22:00']},
         // {id: 5, name: 'NeoCafe №6', phone: "+996(709)456-345", address: 'Улица Байтик Баатыра 134/3', schedule: ['Пн-Пт с 09:00 до 22:00', 'Ср с 10:00 до 21:00', 'Сб-Вс с 09:00 до 22:00']},
     ],
+    selectedBranch: [],
+    selectedDish: [],
+    selectedProduct: [],
     token: null,
     login: false,
 }
@@ -36,6 +39,14 @@ export const productReducer = (state = intialState, {type, payload}) => {
             return {...state, token: payload};
         case ActionTypes.SET_TOKEN:
             return {...state, token: true};
+        case ActionTypes.SET_SELECTED_BRANCH:
+            return {...state, selectedBranch: payload};
+        case ActionTypes.SET_SELECTED_DISH:
+            return {...state, selectedDish: payload};
+        case ActionTypes.SET_SELECTED_PRODUCT:
+            return {...state, selectedProduct: payload};
+        case ActionTypes.SET_SELECTED_EMPLOYEE:
+            return {...state, selectedEmployee: payload};
         case ActionTypes.LOGIN:
             return state;
         default:

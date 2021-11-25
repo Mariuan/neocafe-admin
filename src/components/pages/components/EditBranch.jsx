@@ -1,43 +1,47 @@
-import React, {useState} from 'react';
-import './newBranch.css';
-import Branch_icon from '../../media/Branch.svg';
 import axios from 'axios';
+import React, {useEffect, useState} from 'react'
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
+import { setSelectedBranch } from '../../../redux/actions/productActions';
+import Branch_icon from '../../media/Branch.svg';
+import './newBranch.css';
 
+const fetchBranch = async (id)=>{
+    const response = await axios.get(`https://neocafe6.herokuapp.com/branches/${id}`);
+    return await response.data;
+}
 
-const NewBranch = () => {
-    const [address, setAddress] = useState('');
-    const [name, setName] = useState('');
+const weekDays = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье',];
+
+const EditBranch = () => {
+    const dispatch = useDispatch();
+    let branchId = useParams();
+    const state = useSelector((state)=>state);
+    const branchData = state.allProducts.selectedBranch;
+
+    const [address, setAddress] = useState(null);
+    const [name, setName] = useState(null);
     const [phone, setPhone] = useState(null);
     const [image, setImage] = useState(null);
-    const [ schedule, setSchedule] = useState([
-        {day: 0, name: 'Понедельник', sign: 'Пн', start: '', finish: '', work: false},
-        {day: 1, name: 'Вторник', sign: 'Вт', start: '', finish: '', work: false},
-        {day: 2, name: 'Среда', sign: 'Ср', start: '', finish: '', work: false},
-        {day: 3, name: 'Четверг', sign: 'Чт', start: '', finish: '', work: false},
-        {day: 4, name: 'Пятница', sign: 'Пт', start: '', finish: '', work: false},
-        {day: 5, name: 'Суббота', sign: 'Сб', start: '', finish: '', work: false},
-        {day: 6, name: 'Воскресенье', sign: 'Вс', start: '', finish: '', work: false},
-    ])
-    const handleSubmit  = (e)=>{
-        e.preventDefault();
-        let scheduleData = '';
-        for (let i = 0; i < 7; i++) {
-            scheduleData += schedule[i].sign + ' с ' + schedule[i].start + ' до ' + schedule[i].finish + '#';
-        }
-        axios.post('http://neocafe6.herokuapp.com/branches', {
-            name: name,
-            address: address,
-            phone: phone,
-            opening_hours: scheduleData
-        }).then((res)=>{
-            if (res.status >= 200 && res.status < 400) window.location = '/branches';
-        })
-    }
+    const [ schedule, setSchedule] = useState([])
+    const scheduleArray = [];
+    fetchBranch(branchId.id).then((res)=>{
+        dispatch(setSelectedBranch(res));
+        if (!address) setAddress(res.address); 
+        if (!name) setName(res.name);
+        if (!phone) setPhone(res.phone);
+        if (schedule.length == 0){
+            setSchedule(res.opening_hours.split('#'));
+        } 
+    });
+    console.log(schedule);
+    const handleSubmit = () => {
 
-    return (
-        <div className="new-branch">
-            
-            <div className="new-branch-content">
+    }
+    return(
+    <div className="edit-branch-page">
+        <div className="new-branch-content">
                 <h1 className="new-branch-title">Новый филиал</h1>
                 <form className="new-branch-form"
                 onSubmit={handleSubmit}>
@@ -52,34 +56,41 @@ const NewBranch = () => {
                     <input 
                     type="text" 
                     className="new-branch-address" 
-                    placeholder="Адрес"
+                    placeholder={address}
+                    value={address}
                     onChange={(e)=>{
                         setAddress(e.target.value);
                     }}/>
                     <input 
                     type="text" 
                     className="new-branch-name"
-                    placeholder="Наименование"
+                    placeholder={name}
+                    value={name}
                     onChange={(e)=>{
                         setName(e.target.value);
                     }}/>
                     <input 
                     type="text" 
                     className="new-branch-phone"
-                    placeholder="Номер телефона"
+                    placeholder={phone}
+                    value={phone}
                     onChange={(e)=>{
                         setPhone(e.target.value);
                     }}/>
                     <h1 className="new-branch-schedule-title">График работы</h1>
-                    {schedule.map((item, index)=>(
+                    {schedule.map((item, index)=>{
+                        const start = item[5] + item[6] + item[7] + item[8] + item[9];
+                        const finish = item[14] + item[15] + item[16] + item[17] + item[18];
+                        if (index< schedule.length-1) return (
                         <div key={index} className="new-employee-time">
-                            <p className="new-employee-time-title">{item.name}</p>
+                            <p className="new-employee-time-title">{weekDays[index]}</p>
                                 <div className="new-employee-schedule-time">
                                     <p className="new-employee-time-title">с&nbsp;&nbsp;</p>
                                     <input type="text"
                                     className="new-employee-time-input"
                                     maxLength={5}
                                     placeholder="09:00"
+                                    value={start}
                                     onChange={(e)=>{
                                         let data = schedule;
                                         data[index].start = e.target.value;
@@ -96,6 +107,7 @@ const NewBranch = () => {
                                     className="new-employee-time-input"
                                     maxLength={5}
                                     placeholder="16:00"
+                                    value={finish}
                                     onChange={(e)=>{
                                         let data = schedule;
                                         data[index].finish = e.target.value;
@@ -108,16 +120,14 @@ const NewBranch = () => {
                                         }
                                     }}/>
 
-                                    <input type="checkbox" disabled className="new-employee-time-checkbox"/>
+                                    <input type="checkbox" disabled checked className="new-employee-time-checkbox"/>
                             </div>
                         </div>
-                    ))}
+                    )})}
                     <button type="submit" className="new-branch-save-button">Сохранить</button>
                     <button type="button" className="new-branch-cancel-button">Отменить</button>
                 </form>
             </div>
-        </div>
-    )
-}
-
-export default NewBranch
+    </div>)
+};
+export default EditBranch

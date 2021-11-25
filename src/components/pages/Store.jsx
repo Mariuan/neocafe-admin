@@ -136,7 +136,17 @@ const Store = () => {
                         }
                     }
                 }).map(({id, name, min, unit, date}, index)=>(
-                    <div key={id} className="store-product-list-item">
+                    <div 
+                    key={id} 
+                    className="store-product-list-item"
+                    onClick={(e)=>{
+                        if (e.target.classList[1]) {
+                            e.target.classList.remove('selected');
+                        }
+                        else {
+                            e.target.classList.add('selected');
+                        }
+                    }}>
                         <div className="store-product-list-item-number no-event">{index}</div>
                         <div className="store-product-list-item-name no-event">{name}</div>
                         <div className="store-product-list-item-quantity no-event">-</div>

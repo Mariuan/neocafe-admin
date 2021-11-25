@@ -19,7 +19,7 @@ const Menu = () => {
     }
 
     const fetchCategories = async () => {
-        axios.get('https://neocafe6.herokuapp.com/categories').then((res)=>dispatch(setCategories(res.data)));
+        axios.get('https://neocafe6.herokuapp.com/categories').then((res)=>dispatch(setCategories(res.data.data)));
     }
     
 

@@ -21,6 +21,8 @@ import NewDish from './components/pages/components/NewDish';
 import NewProduct from './components/pages/components/NewProduct';
 import NewEmployee from './components/pages/components/NewEmployee';
 import NewBranch from './components/pages/components/NewBranch';
+import EditBranch from './components/pages/components/EditBranch';
+import EditEmployees from './components/pages/components/EdtiEmployee';
 
 function App() {
   const dispatch = useDispatch()
@@ -62,7 +64,9 @@ function App() {
           <Route exact path="/store/new-product" component={NewProduct}/>
           <Route exact path="/branches" component={Branches}/>
           <Route exact path="/branches/new-branch" component={NewBranch}></Route>
+          <Route path="/branches/:id" exact component={EditBranch}></Route>
           <Route exact path="/employees" component={Employees}/>
+          <Route path="/employees/:phone" component={EditEmployees}/>
           <Route exact path="/employees/new-employee" component={NewEmployee}></Route>
         </Switch>
       </>

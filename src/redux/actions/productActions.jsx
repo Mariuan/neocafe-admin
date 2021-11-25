@@ -49,6 +49,34 @@ export const selectedProduct = (products) => {
     }
 }
 
+export const setSelectedBranch = (branch) => {
+    return {
+        type: "SET_SELECTED_BRANCH",
+        payload: branch,
+    }
+}
+
+export const setSelectedDish = (dish) => {
+    return {
+        type: "SET_SELECTED_DISH",
+        payload: dish,
+    }
+}
+
+export const setSelectedProduct = (product) => {
+    return {
+        type: "SET_SELECTED_PRODUCT",
+        payload: product,
+    }
+}
+
+export const setSelectedEmployee = (data) => {
+    return {
+        type: "SET_SELECTED_EMPLOYEE",
+        payload: data,
+    }
+}
+
 export const setLogin = (token) => {
     return {
         type: "SET_LOGIN",
