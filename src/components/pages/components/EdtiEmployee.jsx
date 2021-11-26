@@ -8,7 +8,7 @@ import { setBranches } from '../../../redux/actions/productActions';
 import './newEmployee.css';
 
 
-const weekDays = ['',]
+const weekDays = ['','','','','','','',]
 
 const fetchEmployee = async (phone) => {
     const response = await axios.get(`https://neocafe6.herokuapp.com/users/${phone}`, {
@@ -21,7 +21,7 @@ const fetchEmployee = async (phone) => {
 
 const fetchBranches = async () => {
     const response = await axios.get('https://neocafe6.herokuapp.com/branches');
-    return await response.data;
+    return await response.data.data;
 }
 
 const NewEmployee = () => {

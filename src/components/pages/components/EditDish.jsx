@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react'
 import { useSelector } from 'react-redux';
-import coffee_icon from '../media/Coffee.svg';
+import coffee_icon from '../../media/Coffee.svg';
 import axios from 'axios';
 import {useDispatch} from 'react-redux';
-import './components/newDish.css';
-import { setCategories, setProducts, setSelectedDish } from '../../redux/actions/productActions';
+import './newDish.css';
+import { setCategories, setProducts } from '../../../redux/actions/productActions';
 import { useParams } from 'react-router';
 
 const fetchProducts = async () => {
@@ -19,25 +19,18 @@ const fetchCategories = async () => {
 
 const fetchDish = async (id) => {
     const response = await axios.get(`https://neocafe6.herokuapp.com/dishes/${id}`);
-    console.log(await response.data.data);
-    return response.data.data;
+    console.log(await response);
 }
 
 const NewDish = () => {
     const dispatch = useDispatch();
     const dishId = useParams();
     const state = useSelector((state)=>state);
-    const [consists, setConsists] = useState([]);
-    const [name, setName] = useState('');
-    const [price, setPrice] = useState('');
-    const [category, setCategory] = useState(-2);
+    const [consistAmount, setConsistAmount] = useState(1);
     const [ image, setImage] = useState();
     let arrConsist = [];
     
-    fetchDish(dishId.id).then((res)=>{
-        dispatch(setSelectedDish())
-        if (!consists) setConsists(res.recipe);
-    });
+    fetchDish();
 
 
 
@@ -89,13 +82,14 @@ const NewDish = () => {
                     }}/>
                     <select className="new-dish-category input" defaultValue={-1}
                     onChange={(e)=>{
+                        setDishData({...dishData, category: state.allProducts.categories[parseInt(e.target.value)].id});
                     }}>
                         <option 
                         value={-1}
                         >Категория</option>
-                        {/* {state.allProducts.categories.map((item, index)=>(
+                        {state.allProducts.categories.map((item, index)=>(
                             <option key={item.id} value={index}>{item.name}</option>
-                        ))} */}
+                        ))}
                     </select>
                     <h1 className="new-dish-subtitle">Состав блюда</h1>
                     {arrConsist.map((item, index)=>(

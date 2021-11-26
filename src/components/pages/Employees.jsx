@@ -38,9 +38,8 @@ const Employees = () => {
 
     const fetchBranches = async () => {
         const response = await axios.get('https://neocafe6.herokuapp.com/branches');
-        dispatch(setBranches(response.data));
+        dispatch(setBranches(response.data.data));
     }
-
     useEffect(()=>{
         fetchEmployees();
         fetchBranches();
@@ -185,13 +184,10 @@ const Employees = () => {
                         <div className="product-item-options"
                         onClick={(e)=>{
                             e.stopPropagation();
-                            if (e.target.childNodes.lenght > 0){
-                                console.log(e.target)
                                 if (e.target.childNodes[0].style.display != 'block') {
                                     e.target.childNodes[0].style.display = 'block';
                                     e.target.childNodes[1].style.display = 'block';
                                 }
-                            }
                             
                             console.log(e.target.childNodes[0]);
                         }}>
@@ -217,7 +213,11 @@ const Employees = () => {
                                         });
                                         
                                     }}>Удалить</p>
-                                    <p className="product-item-actions-list">Редактировать</p>
+                                    <p className="product-item-actions-list"
+                                    onClick={(e)=>{
+                                        e.stopPropagation();
+                                        window.location = `/employees/${phone}`
+                                    }}>Редактировать</p>
                                 </div>
                             <p className="dots no-event">.</p>
                             <p className="dots no-event">.</p>
