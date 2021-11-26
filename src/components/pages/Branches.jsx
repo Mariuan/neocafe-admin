@@ -11,7 +11,7 @@ import EditBranch from './components/EditBranch';
 
 const fetchBranches = async () => {
     const response = await axios.get('https://neocafe6.herokuapp.com/branches');
-    return await response.data;
+    return await response.data.data;
 }
 
 const Branches = () => {

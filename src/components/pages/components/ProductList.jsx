@@ -83,7 +83,12 @@ const ProductList = () => {
                             });
                             
                         }}>Удалить</p>
-                        <p className="product-item-actions-list">Редактировать</p>
+                        <p 
+                        className="product-item-actions-list"
+                        onClick={(e)=>{
+                            e.stopPropagation();
+                            window.location = `/menu/${item.id}`
+                        }}>Редактировать</p>
                     </div>
                 <p className="dots no-event">.</p>
                 <p className="dots no-event">.</p>

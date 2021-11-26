@@ -152,11 +152,45 @@ const Store = () => {
                         <div className="store-product-list-item-quantity no-event">-</div>
                         <div className="store-product-list-item-limit no-event">{min}{` ${unit}`}</div>
                         <div className="store-product-list-item-date no-event">{date}</div>
-                        <div className="store-product-list-item-option">
-                            <div>.</div>
-                            <div>.</div>
-                            <div>.</div>
-                        </div>
+                        <div className="product-item-options"
+            onClick={(e)=>{
+                e.stopPropagation();
+                if (e.target.childNodes[0].style.display != 'block') {
+                    e.target.childNodes[0].style.display = 'block';
+                    e.target.childNodes[1].style.display = 'block';
+                }
+                
+                console.log(e.target.childNodes[0]);
+            }}>
+                <div className="product-item-actions-frame"
+                onClick={(e)=>{
+                    e.stopPropagation();
+                    e.target.nextSibling.style.display = 'none';
+                    e.target.style.display = 'none';
+                    }}> 
+                </div>
+                <div className="product-item-actions">
+                        <p 
+                        className="product-item-actions-list"
+                        onClick={(e)=>{
+                            e.stopPropagation();
+                            axios.delete(`https://neocafe6.herokuapp.com/products/${id}`).then((res)=>{
+                                console.log(res);
+                                if (res.status == 200) e.target.parentNode.parentNode.parentNode.remove();
+                            });
+                            
+                        }}>Удалить</p>
+                        <p 
+                        className="product-item-actions-list"
+                        onClick={(e)=>{
+                            e.stopPropagation();
+                            window.location = `/menu/${id}`
+                        }}>Редактировать</p>
+                    </div>
+                <p className="dots no-event">.</p>
+                <p className="dots no-event">.</p>
+                <p className="dots no-event">.</p>
+            </div>
                     </div>
                 ))}
             </div>

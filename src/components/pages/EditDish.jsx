@@ -9,34 +9,37 @@ import { useParams } from 'react-router';
 
 const fetchProducts = async () => {
     const response =  await axios.get('https://neocafe6.herokuapp.com/products');
-    return await response;
+    return await response.data;
 }
 
 const fetchCategories = async () => {
     const response = await axios.get('https://neocafe6.herokuapp.com/categories');
-    return await response;
+    return await response.data;
 }
 
 const fetchDish = async (id) => {
     const response = await axios.get(`https://neocafe6.herokuapp.com/dishes/${id}`);
-    console.log(await response.data.data);
     return response.data.data;
 }
 
-const NewDish = () => {
+
+const EditDish = () => {
     const dispatch = useDispatch();
     const dishId = useParams();
     const state = useSelector((state)=>state);
     const [consists, setConsists] = useState([]);
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
-    const [category, setCategory] = useState(-2);
+    const [category, setCategory] = useState(-1);
+    const [ unit, setUnit ] = useState(-2);
     const [ image, setImage] = useState();
     let arrConsist = [];
-    
     fetchDish(dishId.id).then((res)=>{
-        dispatch(setSelectedDish())
-        if (!consists) setConsists(res.recipe);
+        dispatch(setSelectedDish(res));
+        if (consists.length == 0) setConsists(res.recipe);
+        if (name == '') setName(res.name);
+        if (price == '') setPrice(res.price);
+        if (category < 0) setCategory(res.category);
     });
 
 
@@ -60,7 +63,7 @@ const NewDish = () => {
     return (
         <div className="new-dish-back">
             <div className="new-dish-content">
-                <h1 className="new-dish-title">Новое блюдо</h1>
+                <h1 className="new-dish-title">Изменить блюдо</h1>
                 <div className="new-dish-image-window">
                     <div className="image-window-content">
                             <img src={coffee_icon} alt="coffee icon" />
@@ -80,25 +83,31 @@ const NewDish = () => {
                 <input type="text" 
                     className="input dish-name-input"
                     placeholder="Наименование блюда"
+                    value={name}
+                    style={{color: "#464646"}}
                     onChange={(e)=>{
+                        setName(e.target.value)
                     }}
                     required/>
                     <input className="input dish-price-input"
                     placeholder="Стоимость блюда"
+                    value={price}
                     onChange={(e)=>{
+                        setPrice(e.target.value);
                     }}/>
-                    <select className="new-dish-category input" defaultValue={-1}
+                    <select className="new-dish-category input" value={category}
                     onChange={(e)=>{
+                        setCategory(parseInt(e.target.value));
                     }}>
                         <option 
                         value={-1}
                         >Категория</option>
-                        {/* {state.allProducts.categories.map((item, index)=>(
-                            <option key={item.id} value={index}>{item.name}</option>
-                        ))} */}
+                        {state.allProducts.categories.map((item, index)=>(
+                            <option key={item.id} value={item.id}>{item.name}</option>
+                        ))}
                     </select>
                     <h1 className="new-dish-subtitle">Состав блюда</h1>
-                    {arrConsist.map((item, index)=>(
+                    {consists.map((item, index)=>(
                         <div key={item.id}>
                             <select className="dish-name-input input"
                             onChange={(e)=>{
@@ -114,20 +123,26 @@ const NewDish = () => {
                             <input type="text" 
                             className="dish-quantity-input input"
                             placeholder="Количество"
+                            value={item.quantity}
                             onChange={(e)=>{
+                                let data = consists;
+                                data[index].quantity = parseInt(e.target.value);
+                                setConsists(data);
                             }}/>
-                            <select className="new-dish-category input" defaultValue={-1}
+                            <select className="new-dish-category input" 
+                            value={item.unit}
                             onChange={(e)=>{
-                                if (e.target.value != -1) {
-                                    e.target.style.color = "#000";
-                                }
+                                let data = consists;
+                                data[index].unit = e.target.value;
+                                setConsists(data);
                             }}>
                                 <option value={-1} disabled hidden>г, мл</option>
-                                <option value={0}>Г</option>
-                                <option value={1}>Мл</option>
+                                <option value='г'>Г</option>
+                                <option value='Мл'>Мл</option>
                             </select>
                         </div>
                     ))}
+
                     <button type="button" className="new-dish-add-more-button" onClick={(e)=>{
                     }}>Добавить ещё</button>
                     <button type="submit" className="new-dish-save-button" onClick={handleSubmit}>Сохранить</button>
@@ -137,4 +152,4 @@ const NewDish = () => {
     )
 }
 
-export default NewDish
+export default EditDish

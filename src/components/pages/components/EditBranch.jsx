@@ -42,7 +42,7 @@ const EditBranch = () => {
     return(
     <div className="edit-branch-page">
         <div className="new-branch-content">
-                <h1 className="new-branch-title">Новый филиал</h1>
+                <h1 className="new-branch-title">Изменить филиал</h1>
                 <form className="new-branch-form"
                 onSubmit={handleSubmit}>
                     <div className="new-branch-image-box">
