@@ -31,17 +31,25 @@ const EditDish = () => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [category, setCategory] = useState(-1);
-    const [ unit, setUnit ] = useState(-2);
-    const [ image, setImage] = useState();
+    const [ image, setImage] = useState(null);
+    const [imageSrc, setImageSrc] = useState(null);
     let arrConsist = [];
-    fetchDish(dishId.id).then((res)=>{
-        dispatch(setSelectedDish(res));
-        if (consists.length == 0) setConsists(res.recipe);
-        if (name == '') setName(res.name);
-        if (price == '') setPrice(res.price);
-        if (category < 0) setCategory(res.category);
-    });
-
+    if (state.allProducts.selectedDish.length == 0) {
+        fetchDish(dishId.id).then((res)=>{
+            dispatch(setSelectedDish(res));
+            if (consists.length == 0) {
+                setConsists(res.recipe);
+                console.log(res.recipe);
+            }
+            if (name == '') setName(res.name);
+            if (price == '') setPrice(res.price);
+            if (category < 0) setCategory(res.category);
+            if (!image) {
+                setImage(res.image);
+                setImageSrc(res.image);
+            }
+        });
+    }
 
 
 
@@ -58,7 +66,15 @@ const EditDish = () => {
 
     }, [])
     const handleSubmit = () => {
-        
+        let data = new FormData();
+        data.append("name", name);
+        data.append("category", category);
+        data.append("price", price);
+        data.append("image", image);
+        data.append("recipe", consists);
+        axios.patch(`https://neocafe6.herokuapp.com/dishes/${dishId.id}`, data).catch((err)=>console.log(err)).then((res)=>{
+            window.location = "/menu";
+        })
     }
     return (
         <div className="new-dish-back">
@@ -66,17 +82,27 @@ const EditDish = () => {
                 <h1 className="new-dish-title">Изменить блюдо</h1>
                 <div className="new-dish-image-window">
                     <div className="image-window-content">
-                            <img src={coffee_icon} alt="coffee icon" />
+                            {!image &&
+                            <img src={image} alt="dish image"/>}
+                            {image &&
+                            <img src={imageSrc} alt="dish image" width={110} />}
                             <p className="image-input-label"
                             onClick={(e)=>{
                                 e.target.nextSibling.click(); 
-                            }}>Добавить картинку</p>
+                            }}>Изменить картинку</p>
                             <input type="file" 
                             accept="image/png, image/svg, image/jpeg, image/png" 
                             name="image"
                             className="image-input"
                             onChange={(e)=>{
                                 setImage(e.target.files[0]);
+                                const file = e.target.files[0];
+                                var reader = new FileReader();
+                                var url = reader.readAsDataURL(file);
+                                reader.onloadend = (e)=>{
+                                    setImageSrc(reader.result);
+                                }
+                                setImageSrc(url);
                             }}/>
                     </div>
                 </div>
@@ -144,6 +170,9 @@ const EditDish = () => {
                     ))}
 
                     <button type="button" className="new-dish-add-more-button" onClick={(e)=>{
+                        let data = consists;
+                        data = [...data, {id: null, quantity: null, unit: -1}]
+                        setConsists(data);
                     }}>Добавить ещё</button>
                     <button type="submit" className="new-dish-save-button" onClick={handleSubmit}>Сохранить</button>
                     <button type="button" className="new-dish-cancel-button" onClick={()=>window.location = "/menu"}>Отменить</button>

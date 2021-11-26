@@ -8,13 +8,14 @@ import { setCategories, setProducts } from '../../../redux/actions/productAction
 
 const fetchProducts = async () => {
     const response =  await axios.get('https://neocafe6.herokuapp.com/products');
-    return await response;
+    return await response.data;
 }
 
 const fetchCategories = async () => {
     const response = await axios.get('https://neocafe6.herokuapp.com/categories');
-    return await response;
+    return await response.data;
 }
+
 
 
 const NewDish = () => {
@@ -23,11 +24,13 @@ const NewDish = () => {
     const [consistAmount, setConsistAmount] = useState(1);
     const [dishData ,setDishData] = useState({name: null, price: null, category: null, image: null, recipe: []})
     const [consists, setConsists] = useState([{product: null, quantity: null}])
-    const [ image, setImage] = useState();
+    const [ image, setImage] = useState(null);
+    const [imageSrc, setImageSrc] = useState(null);
     let arrConsist = [];
     for (let i = 0; i < consistAmount; i++) {
         arrConsist.push(i);
     }
+
     useEffect(() => {
         fetchProducts().then((res)=>{
             dispatch(setProducts(res.data));
@@ -54,17 +57,33 @@ const NewDish = () => {
                 <h1 className="new-dish-title">Новое блюдо</h1>
                 <div className="new-dish-image-window">
                     <div className="image-window-content">
-                            <img src={coffee_icon} alt="coffee icon" />
+                            {!image &&
+                            <img src={coffee_icon} alt="coffee icon" />}
+                            {image &&
+                            <img src={imageSrc} width={110} />}
+                            {!image &&
                             <p className="image-input-label"
                             onClick={(e)=>{
                                 e.target.nextSibling.click(); 
-                            }}>Добавить картинку</p>
+                            }}>Добавить картинку</p>}
+                            {image &&
+                            <p className="image-input-label"
+                            onClick={(e)=>{
+                                e.target.nextSibling.click(); 
+                            }}>Изменить картинку</p>}
                             <input type="file" 
                             accept="image/png, image/svg, image/jpeg, image/png" 
                             name="image"
                             className="image-input"
                             onChange={(e)=>{
                                 setImage(e.target.files[0]);
+                                const file = e.target.files[0];
+                                var reader = new FileReader();
+                                var url = reader.readAsDataURL(file);
+                                reader.onloadend = (e)=>{
+                                    setImageSrc(reader.result);
+                                }
+                                setImageSrc(url);
                             }}/>
                     </div>
                 </div>
@@ -82,19 +101,20 @@ const NewDish = () => {
                     }}/>
                     <select className="new-dish-category input" defaultValue={-1}
                     onChange={(e)=>{
-                        setDishData({...dishData, category: state.allProducts.categories[parseInt(e.target.value)].id});
+                        setDishData({...dishData, category: parseInt(e.target.value)});
                     }}>
                         <option 
                         value={-1}
                         >Категория</option>
                         {state.allProducts.categories.map((item, index)=>(
-                            <option key={item.id} value={index}>{item.name}</option>
+                            <option key={index} value={item.id}>{item.name}</option>
                         ))}
                     </select>
                     <h1 className="new-dish-subtitle">Состав блюда</h1>
                     {arrConsist.map((item, index)=>(
                         <div key={item.id}>
                             <select className="dish-name-input input"
+                            defaultValue={-1}
                             onChange={(e)=>{
                                 if (e.target.value != -1) {
                                     e.target.style.color = "#000";

@@ -186,6 +186,12 @@ const Store = () => {
                             e.stopPropagation();
                             window.location = `/menu/${id}`
                         }}>Редактировать</p>
+                        <p 
+                        className="product-item-actions-list"
+                        onClick={(e)=>{
+                            e.stopPropagation();
+                            // window.location = `/menu/${id}`
+                        }}>Пополнить</p>
                     </div>
                 <p className="dots no-event">.</p>
                 <p className="dots no-event">.</p>
