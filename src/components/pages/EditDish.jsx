@@ -68,14 +68,21 @@ const EditDish = () => {
     }, [])
     const handleSubmit = () => {
         let data = new FormData();
+        data.append("id", dishId.id);
         data.append("name", name);
         data.append("category", category);
         data.append("price", price);
-        data.append("image", image);
+        if (image) data.append("image", image);
+        let recipe = []
+        consists.map((item)=>recipe.push(item));
+        console.log(typeof recipe);
+        console.log(typeof consists);
         data.append("recipe", consists);
-        // axios.patch(`https://neocafe6.herokuapp.com/dishes/${dishId.id}`, data).catch((err)=>console.log(err)).then((res)=>{
-        //     window.location = "/menu";
-        // })
+        axios.patch(`https://neocafe6.herokuapp.com/dishes/${dishId.id}`, data).catch((err)=>console.log(err)).then((res)=>{
+            console.log(res);
+            alert(res);
+            window.location = "/menu";
+        })
         console.log(consists);
     }
     return (
@@ -136,13 +143,16 @@ const EditDish = () => {
                     </select>
                     <h1 className="new-dish-subtitle">Состав блюда</h1>
                     {consists.map((item, index)=>(
-                        <div key={item.id}>
+                        <div key={index}>
                             <select className="dish-name-input input"
                             defaultValue={-1}
                             onChange={(e)=>{
                                 if (e.target.value != -1) {
                                     e.target.style.color = "#000";
                                 }
+                                let data = consists;
+                                data[index].product = parseInt(e.target.value)
+                                setConsists(data);
                             }}>
                                 <option value={-1} disabled hidden>Ингридиент</option>
                                 {state.allProducts.store.map((item, index)=>(
@@ -158,7 +168,7 @@ const EditDish = () => {
                                 data[index].quantity = parseInt(e.target.value);
                                 setConsists(data);
                             }}/>
-                            <select className="new-dish-category input" 
+                            {/* <select className="new-dish-category input" 
                             value={item.unit}
                             onChange={(e)=>{
                                 let data = consists;
@@ -168,13 +178,13 @@ const EditDish = () => {
                                 <option value={-1} disabled hidden>г, мл</option>
                                 <option value='г'>Г</option>
                                 <option value='Мл'>Мл</option>
-                            </select>
+                            </select> */}
                         </div>
                     ))}
 
                     <button type="button" className="new-dish-add-more-button" onClick={(e)=>{
                         let data = consists;
-                        data = [...data, {id: null, quantity: null, unit: -1}]
+                        data = [...data, {product: null, quantity: null}]
                         setConsists(data);
                     }}>Добавить ещё</button>
                     <button type="submit" className="new-dish-save-button" onClick={handleSubmit}>Сохранить</button>
