@@ -16,21 +16,33 @@ const notifications_data = [
             {id: 1, name: 'Кофе', quantity: 1, unit: 'Кг'},
             {id: 2, name: 'Круассан', quantity: 2, unit: 'Шт'},
             {id: 3, name: 'Апельсиновый сок', quantity: 3, unit: 'Л'},
-        ]
+        ],
+        branch: 'NeoCafe №1'
     },
     {id: 1, status: 'Срочно пополить', description: [
             {id: 0, name: 'Молоко', quantity: 2, unit: 'Л'},
             {id: 1, name: 'Кофе', quantity: 1, unit: 'Кг'},
             {id: 2, name: 'Круассан', quantity: 2, unit: 'Шт'},
             {id: 3, name: 'Апельсиновый сок', quantity: 3, unit: 'Л'},
-        ]
+        ],
+        branch: 'NeoCafe №1'
     },
+    
     {id: 2, status: 'Лимит упал', description: [
             {id: 0, name: 'Молоко', quantity: 2, unit: 'Л'},
             {id: 1, name: 'Кофе', quantity: 1, unit: 'Кг'},
             {id: 2, name: 'Круассан', quantity: 2, unit: 'Шт'},
             {id: 3, name: 'Апельсиновый сок', quantity: 3, unit: 'Л'},
-        ]
+        ],
+        branch: 'NeoCafe №1'
+    },
+    {id: 3, status: 'Лимит упал', description: [
+            {id: 0, name: 'Молоко', quantity: 2, unit: 'Л'},
+            {id: 1, name: 'Кофе', quantity: 1, unit: 'Кг'},
+            {id: 2, name: 'Круассан', quantity: 2, unit: 'Шт'},
+            {id: 3, name: 'Апельсиновый сок', quantity: 3, unit: 'Л'},
+        ],
+        branch: 'NeoCafe №1'
     },
 ]
 
@@ -102,25 +114,32 @@ const Main = () => {
                 {notification &&
                 <div className="notification-window">
                     <div className="notification-header">
-                        <h1 className="notification-header-title">Уведомления</h1>
-                        <img src={coolicon} alt="close window" 
-                        className="notification-close-icon" 
-                        onClick={()=>setNotification(false)}/>
+                            <h1 className="notification-header-title">Уведомления</h1>
+                            <img src={coolicon} alt="close window" 
+                            className="notification-close-icon" 
+                            onClick={()=>setNotification(false)}/>
                     </div>
                     <div className="notification-content">
-                        {notifications_data.map((item)=>(
-                            <div className="notification-item">
-                                <img src={nc} alt="" className="notification-item-icon"/>
-                                <div className="notification-item-content">
-                                    <div className="notification-item-status">{item.status}</div>
-                                    <div className="notification-item-description">
-                                        {item.description.map((item)=>(
-                                            <p key={item.id}>{`${item.name} ${item.quantity} ${item.unit}`}</p>
-                                        ))}
+                            {notifications_data.map((item)=>(
+                                <div className="notification-item">
+                                    <img src={nc} alt="" className="notification-item-icon"/>
+                                    <div className="notification-item-content">
+                                        <div className="notification-item-status">{item.status}</div>
+                                        <div className="notification-item-description">
+                                            {item.description.map((item, index)=>(
+                                                <p 
+                                                key={item.id}
+                                                className="notification-item-consist">{`${item.name} ${item.quantity} ${item.unit},`}</p>
+                                            ))}
+                                        </div>
+                                        <div className="notification-footer">
+                                            <div className="notification-item-branch">{item.branch}</div>
+                                            <div className="notification-item-time">{item.time}</div>
+                                        </div>
+
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
                     </div>
                 </div>
                 }

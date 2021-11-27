@@ -33,6 +33,7 @@ const EditDish = () => {
     const [category, setCategory] = useState(-1);
     const [ image, setImage] = useState(null);
     const [imageSrc, setImageSrc] = useState(null);
+    console.log(consists);
     let arrConsist = [];
     if (state.allProducts.selectedDish.length == 0) {
         fetchDish(dishId.id).then((res)=>{
@@ -72,9 +73,10 @@ const EditDish = () => {
         data.append("price", price);
         data.append("image", image);
         data.append("recipe", consists);
-        axios.patch(`https://neocafe6.herokuapp.com/dishes/${dishId.id}`, data).catch((err)=>console.log(err)).then((res)=>{
-            window.location = "/menu";
-        })
+        // axios.patch(`https://neocafe6.herokuapp.com/dishes/${dishId.id}`, data).catch((err)=>console.log(err)).then((res)=>{
+        //     window.location = "/menu";
+        // })
+        console.log(consists);
     }
     return (
         <div className="new-dish-back">
@@ -136,6 +138,7 @@ const EditDish = () => {
                     {consists.map((item, index)=>(
                         <div key={item.id}>
                             <select className="dish-name-input input"
+                            defaultValue={-1}
                             onChange={(e)=>{
                                 if (e.target.value != -1) {
                                     e.target.style.color = "#000";
@@ -143,7 +146,7 @@ const EditDish = () => {
                             }}>
                                 <option value={-1} disabled hidden>Ингридиент</option>
                                 {state.allProducts.store.map((item, index)=>(
-                                    <option key={item.id} value={index}>{item.name}</option>
+                                    <option key={item.id} value={item.id}>{item.name}</option>
                                 ))}
                             </select>
                             <input type="text" 
