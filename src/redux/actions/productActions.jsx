@@ -35,12 +35,13 @@ export const setEmployees = (employees) => {
     }
 }
 
-export const removeBranch = (id) => {
+export const setNotification = (data) => {
     return {
-        type: "SET_EMPLOYEES",
-        payload: id
+        type: "SET_NOTIFICATION",
+        payload: data
     }
 }
+
 
 export const selectedProduct = (products) => {
     return {

@@ -4,7 +4,11 @@ import AddButton from '../media/AddButton.svg';
 import Search from './components/Search';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { setBranches, setEmployees } from '../../redux/actions/productActions';
+import { setBranches, setEmployees, setMessage } from '../../redux/actions/productActions';
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useLocation } from 'react-router';
 
 
 
@@ -15,7 +19,6 @@ const Employees = () => {
     const [filterByName, setFilterByName] = useState('');
     const [filterByBranch, setFilterByBranch] = useState(-1);
     const [filterByPosition, setFilterByPosition] = useState(-1);
-    
     const handleFilterByName = (e) => {
         setFilterByName(e.target.value);
     }
@@ -86,7 +89,7 @@ const Employees = () => {
                 <div className="employees-filter-extra-options">
                     <button type="button" className="employees-filter-rating-button">По рейтингу</button>
                     <img src={AddButton} alt="add new employees button" className="employees-filter-add-button"
-                    onClick={()=>window.location = '/employees/new-employee'}/>
+                    onClick={()=>window.location = '/new-employee'}/>
                 </div>
             </div>
             <div className="employees-list-title">
@@ -180,7 +183,7 @@ const Employees = () => {
                         </div>
                         <div className="employees-list-item-block employees-list-item-phone no-event">+996 {phone}</div>
                         <div className="employees-list-item-block employees-list-item-birthday no-event">{birthdate}</div>
-                        <div className="employees-list-item-block employees-list-item-schedule no-event">{schedule}</div>
+                        <div className="employees-list-item-block employees-list-item-schedule no-event"></div>
                         <div className="product-item-options"
                         onClick={(e)=>{
                             e.stopPropagation();
@@ -203,13 +206,21 @@ const Employees = () => {
                                     className="product-item-actions-list"
                                     onClick={(e)=>{
                                         e.stopPropagation();
+                                        toast.promise(
                                         axios.delete(`https://neocafe6.herokuapp.com/users/${phone}`,{
                                             headers: {
                                                 "Authorization": `Bearer ${localStorage.getItem('neo-cafe-admin-token')}`
                                             }
                                         }).then((res)=>{
                                             console.log(res);
-                                            if (res.status == 200) e.target.parentNode.parentNode.parentNode.remove();
+                                            if (res.status == 200) {
+                                                e.target.parentNode.parentNode.parentNode.remove();
+                                            }
+                                        }),
+                                        {
+                                            pending: 'Удаление',
+                                            success: 'Сотрудник удален',
+                                            error: 'Ошибка'
                                         });
                                         
                                     }}>Удалить</p>

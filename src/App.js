@@ -67,7 +67,7 @@ function App() {
           <Route path="/branches/:id" exact component={EditBranch}></Route>
           <Route exact path="/employees" component={Employees}/>
           <Route path="/employees/:phone" component={EditEmployees}/>
-          <Route exact path="/employees/new-employee" component={NewEmployee}></Route>
+          <Route exact path="/new-employee" component={NewEmployee}></Route>
         </Switch>
       </>
     )

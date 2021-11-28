@@ -5,6 +5,7 @@ import axios from 'axios';
 import {useDispatch} from 'react-redux';
 import './newDish.css';
 import { setCategories, setProducts } from '../../../redux/actions/productActions';
+import { toast } from 'react-toastify';
 
 const fetchProducts = async () => {
     const response =  await axios.get('https://neocafe6.herokuapp.com/products');
@@ -49,7 +50,13 @@ const NewDish = () => {
         for (let i  in consists) {
             data.append('recipe[]', JSON.stringify(consists[i]));
         }
-        axios.post('https://neocafe6.herokuapp.com/dishes', data).catch((err)=>console.log(err));
+        toast.promise(
+        axios.post('https://neocafe6.herokuapp.com/dishes', data).catch((err)=>console.log(err)),
+        {
+            pending: 'Удаление',
+            success: 'Блюдо добавлено',
+            error: 'Ошибка'
+        });
     }
     return (
         <div className="new-dish-back">

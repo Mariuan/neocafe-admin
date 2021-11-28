@@ -1,6 +1,11 @@
-import React, {useState} from 'react'
-import { useSelector } from 'react-redux';
+import axios from 'axios';
+import React, {useEffect, useState} from 'react'
+import { useSelector, useDispatch } from 'react-redux';
 import './newEmployee.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { setBranches, setMessage } from '../../../redux/actions/productActions';
+import { useHistory } from 'react-router';
 
 const weekDays = [
     {name: 'Понедельник', shortName: 'Пн'},
@@ -12,20 +17,74 @@ const weekDays = [
     {name: 'Воскресенье', shortName: 'Вс'},
 ]
 
+const fetchBranches = async () => {
+    const response = await axios.get('https://neocafe6.herokuapp.com/branches');
+    return await response.data.data;
+}
+
 const NewEmployee = () => {
+    const dispatch = useDispatch();
+    const history = useHistory();
     const state = useSelector((state)=>state);
     const [name, setName] = useState('');
     const [lastname, setLastname] = useState('');
     const [birthday, setBirthday] = useState(null);
     const [phone, setPhone] = useState(null);
-    const [branch, setBranch] = useState(null);
+    const [branch, setBranch] = useState(-1);
     const [post, setPost] = useState(null);
+    const [schedule, setSchedule] = useState([
+        {day: 0, name: "Понедельник", shortName: "Пн", start: "", finish: "", work: false},
+        {day: 1, name: "Вторник", shortName: "Вт", start: "", finish: "", work: false},
+        {day: 2, name: "Среда", shortName: "Ср", start: "", finish: "", work: false},
+        {day: 3, name: "Четверг", shortName: "Чт", start: "", finish: "", work: false},
+        {day: 4, name: "Пятница", shortName: "Пт", start: "", finish: "", work: false},
+        {day: 5, name: "Суббота", shortName: "Сб", start: "", finish: "", work: false},
+        {day: 6, name: "Воскресенье", shortName: "Вс", start: "", finish: "", work: false},
+    ])
+    
+    useEffect(()=>{
+        fetchBranches().then((res)=>{
+            dispatch(setBranches(res));
+        })
+    }, [])
 
-
-    const [ schedule, setSchedule] = useState(state.allProducts.selectedEmployee.split('#'));
-    console.log(schedule);
-
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (branch == -1 || name == '' || lastname == '' || phone == '' || !post) {
+            toast.error("Заполните все данные",{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+        }
+        else {
+            toast.promise(
+            axios.post(`https://neocafe6.herokuapp.com/users`, {
+                phone: parseInt(phone),
+                firstname: name,
+                lastname: lastname,
+                birthday: birthday,
+                schedule: JSON.stringify(schedule),
+                role: post,
+                branch: branch
+            },{
+                headers:{
+                    "Authorization": `Bearer ${localStorage.getItem('neo-cafe-admin-token')}`
+                }
+            }).catch((err)=>console.log(err)).then((res)=>{
+                console.log(res);
+                history.push('/employees')
+            }),
+            {
+                pending: 'Удаление',
+                success: 'Сотрудник добавлен',
+                error: 'Ошибка'
+            });
+        }
     }
 
     return (
@@ -65,7 +124,7 @@ const NewEmployee = () => {
                         setPhone(e.target.value);
                     }}/>
                     <select
-                    defaultValue={-1}
+                    value={branch}
                     className="new-employee-branch"
                     onChange={(e)=>{
                         if (e.target.value != -1) e.target.style.color = "#464646";
@@ -98,9 +157,9 @@ const NewEmployee = () => {
                         <option value={2}>Администратор</option>
                     </select>
                     <h1 className="new-employee-schedule-title">График работы</h1>
-                    {weekDays.map((item, index)=>(
+                    {schedule.map((item, index)=>(
                         <div key={index} className="new-employee-time">
-                            <p className="new-employee-time-title">{item[0]}</p>
+                            <p className="new-employee-time-title">{item.name}</p>
                                 <div className="new-employee-schedule-time">
                                     <p className="new-employee-time-title">с&nbsp;&nbsp;</p>
                                     <input type="text"
@@ -126,13 +185,15 @@ const NewEmployee = () => {
                                     onChange={(e)=>{
                                         let data = schedule;
                                         data[index].finish = e.target.value;
-                                        setSchedule(data);
                                         if (schedule[index].start.length == 5 && e.target.value.length == 5) {
                                             e.target.nextSibling.checked = true;
+                                            data[index].work = true;
                                         }
                                         else {
                                             e.target.nextSibling.checked = false;
+                                            data[index].work = false;
                                         }
+                                        setSchedule(data);
                                     }}/>
 
                                     <input type="checkbox" disabled className="new-employee-time-checkbox"/>
@@ -140,12 +201,13 @@ const NewEmployee = () => {
                         </div>
                     ))}
                     <button
-                    type="submit"
+                    type="button"
+                    onClick={handleSubmit}
                     className="new-employee-save-button">Сохранить</button>
                     <button
                     type="button"
                     className="new-employee-cancel-button"
-                    onClick={()=>window.location = '/employees'}>Отменить</button>
+                    onClick={()=>history.goBack()}>Отменить</button>
                 </form>
             </div>
         </div>

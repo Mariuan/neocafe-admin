@@ -57,10 +57,9 @@
 }
 
 .new-product-limit {
-    width: 45%;
+    width: 95%;
     padding: 20px 6px;
-    margin: 10px 0;
-    ;
+    margin: 10px 0;;
     border: 1px solid #DDDCDC;
     border-radius: 10px;
     font-size: 18px;
@@ -77,6 +76,7 @@
     font-size: 18px;
     font-weight: 400;
     outline: none;
+    margin-top: 10px;
 }
 
 .new-product-type {
@@ -88,6 +88,7 @@
     font-size: 18px;
     font-weight: 400;
     outline: none;
+    margin-left: 2.5%;
 }
 
 .new-product-save-button {

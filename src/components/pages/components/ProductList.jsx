@@ -6,6 +6,7 @@ import { Link, Route } from 'react-router-dom';
 import '../menu.css';
 import NewDish from './NewDish';
 import axios, { Axios } from 'axios';
+import { toast } from 'react-toastify';
 
 const ProductList = () => {
     const [filter, setFilter] = useState('');
@@ -77,9 +78,15 @@ const ProductList = () => {
                         className="product-item-actions-list"
                         onClick={(e)=>{
                             e.stopPropagation();
+                            toast.promise(
                             axios.delete(`https://neocafe6.herokuapp.com/dishes/${item.id}`).then((res)=>{
                                 console.log(res);
                                 if (res.status == 200) e.target.parentNode.parentNode.parentNode.remove();
+                            }),
+                            {
+                                pending: 'Удаление',
+                                success: 'Товар удален',
+                                error: 'Ошибка'
                             });
                             
                         }}>Удалить</p>

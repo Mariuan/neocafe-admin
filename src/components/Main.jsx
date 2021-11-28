@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { setToken } from '../redux/actions/productActions';
+import { setToken, setNotification, setBranches } from '../redux/actions/productActions';
 import notification_logo from './media/notification-logo.svg';
 import SignOutLogo from './media/SignOut.svg';
 import logo from './media/neocafe.svg';
@@ -9,6 +9,7 @@ import './main.css';
 import { Redirect, Link, useHistory } from 'react-router-dom';
 import coolicon from './media/coolicon.svg';
 import nc from './media/nc.svg';
+import { useSelector } from 'react-redux';
 
 const notifications_data = [
     {id: 0, status: 'Лимит упал', description: [
@@ -46,10 +47,22 @@ const notifications_data = [
     },
 ]
 
+const fetchNoti = async (id) => {
+    const response = await axios.get(`https://neocafe6.herokuapp.com/storages/${id}?type=limited`);
+    console.log(response.data.data);
+    return await response.data.data;
+}
+
+const fetchBranch = async () =>{
+    const response = await axios.get('https://neocafe6.herokuapp.com/branches');
+    return await response.data.data;
+}
+
 const Main = () => {
     const [page, setPage] = useState('menu');
     const [notification, setNotification] = useState(false);
     const dispatch = useDispatch()
+    const state = useSelector((state)=>state);
     useEffect(() => {
         if (window.location.pathname[1] == 'm') {
             setPage('menu');
@@ -60,7 +73,7 @@ const Main = () => {
         else if (window.location.pathname[1] == 'b') {
             setPage('branches');
         }
-        else if (window.location.pathname[1] == 'e') {
+        else if (window.location.pathname[1] == 'e' || window.location.pathname[1] == 'n') {
             setPage('employees');
         }
     }, [useHistory])
@@ -120,8 +133,8 @@ const Main = () => {
                             onClick={()=>setNotification(false)}/>
                     </div>
                     <div className="notification-content">
-                            {notifications_data.map((item)=>(
-                                <div className="notification-item">
+                            {notifications_data.map((item, index)=>(
+                                <div key={index} className="notification-item">
                                     <img src={nc} alt="" className="notification-item-icon"/>
                                     <div className="notification-item-content">
                                         <div className="notification-item-status">{item.status}</div>
@@ -149,6 +162,7 @@ const Main = () => {
                     window.location = '/';
                 }}/>
             </div>
+            
         </div>
     )
 }

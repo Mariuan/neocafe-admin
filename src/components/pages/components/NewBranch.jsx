@@ -2,9 +2,12 @@ import React, {useState} from 'react';
 import './newBranch.css';
 import Branch_icon from '../../media/Branch.svg';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useHistory } from 'react-router';
 
 
 const NewBranch = () => {
+    const history = useHistory();
     const [address, setAddress] = useState('');
     const [name, setName] = useState('');
     const [phone, setPhone] = useState(null);
@@ -24,14 +27,22 @@ const NewBranch = () => {
         for (let i = 0; i < 7; i++) {
             scheduleData += schedule[i].sign + ' с ' + schedule[i].start + ' до ' + schedule[i].finish + '#';
         }
+        toast.promise(
         axios.post('http://neocafe6.herokuapp.com/branches', {
             name: name,
             address: address,
             phone: phone,
             opening_hours: scheduleData
         }).then((res)=>{
-            if (res.status >= 200 && res.status < 400) window.location = '/branches';
-        })
+            if (res.status >= 200 && res.status < 400) {
+                history.push('/branches');
+            }
+        }),
+        {
+            pending: 'Удаление',
+            success: 'Филиал создан',
+            error: 'Ошибка'
+        });
     }
 
     return (

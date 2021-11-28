@@ -179,14 +179,17 @@
     display: none;
     position: absolute;
     z-index: 10;
-    right: 0px;
+    right: 50px;
     padding: 0px 9px;
     background: #fff;
     border: 1px solid #DDDCDC;
     border-radius:10px;
+    line-height: 6px;
 }
 
-
+.product-item-actions-list {
+    margin: 25px 0;
+}
 
 .dots {
     margin: 0;

@@ -46,12 +46,10 @@ const EditDish = () => {
             if (price == '') setPrice(res.price);
             if (category < 0) setCategory(res.category);
             if (!image) {
-                setImage(res.image);
                 setImageSrc(res.image);
             }
         });
     }
-
 
 
 
@@ -68,22 +66,27 @@ const EditDish = () => {
     }, [])
     const handleSubmit = () => {
         let data = new FormData();
-        data.append("id", dishId.id);
+        data.append("id",dishId.id);
         data.append("name", name);
         data.append("category", category);
         data.append("price", price);
-        if (image) data.append("image", image);
-        let recipe = []
-        consists.map((item)=>recipe.push(item));
-        console.log(typeof recipe);
-        console.log(typeof consists);
-        data.append("recipe", consists);
+        for (let i = 0; i < consists.length; i++) {
+            data.append("recipe", JSON.stringify(consists[i]));
+        }
+        if (image) data.append('image', image);
+        // let config = {
+        //     id: dishId.id,
+        //     name: name,
+        //     category: category,
+        //     price: price,
+        //     recipe: consists
+        // }
+        // if (image) {
+        //     config = {...config, image: image}
+        // }
         axios.patch(`https://neocafe6.herokuapp.com/dishes/${dishId.id}`, data).catch((err)=>console.log(err)).then((res)=>{
-            console.log(res);
-            alert(res);
             window.location = "/menu";
         })
-        console.log(consists);
     }
     return (
         <div className="new-dish-back">
@@ -91,9 +94,9 @@ const EditDish = () => {
                 <h1 className="new-dish-title">Изменить блюдо</h1>
                 <div className="new-dish-image-window">
                     <div className="image-window-content">
-                            {!image &&
+                            {!imageSrc &&
                             <img src={image} alt="dish image"/>}
-                            {image &&
+                            {imageSrc &&
                             <img src={imageSrc} alt="dish image" width={110} />}
                             <p className="image-input-label"
                             onClick={(e)=>{
@@ -162,7 +165,6 @@ const EditDish = () => {
                             <input type="text" 
                             className="dish-quantity-input input"
                             placeholder="Количество"
-                            value={item.quantity}
                             onChange={(e)=>{
                                 let data = consists;
                                 data[index].quantity = parseInt(e.target.value);

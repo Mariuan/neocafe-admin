@@ -94,7 +94,7 @@
 .notification-content {
     padding: 20px 40px;
     height: 530px;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .notification-item {

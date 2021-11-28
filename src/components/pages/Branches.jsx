@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setBranches } from '../../redux/actions/productActions';
-import EditBranch from './components/EditBranch';
+import { toast } from 'react-toastify';
 
 
 const fetchBranches = async () => {
@@ -40,13 +40,18 @@ const Branches = () => {
                         className="delete-branch-confirm-button"
                         onClick={(e)=>{
                             e.target.parentNode.style.opacity = '.8';
+                            toast.promise(
                             axios.delete(`https://neocafe6.herokuapp.com/branches/${deleteBranchData.id}`).then((res)=>{
                                 if (res.status == 200) deleteBranchData.element.remove();
                                 setDeleteBranchData(null);
-                                // dispatch(deleteBranch(deleteBranchData.id));
                                 document.body.style.overflow = 'auto';
                                 e.target.parentNode.style.opacity = '1';
-                            })
+                            }),
+                            {
+                                pending: 'Удаление',
+                                success: 'Филиал удален',
+                                error: 'Ошибка'
+                            });
                         }}>Да</button>
                         <button
                         className="delete-branch-reject-button"
