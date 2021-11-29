@@ -14,6 +14,41 @@ const fetchBranches = async () => {
     return await response.data.data;
 }
 
+const scheduleParse = (schedule) =>{
+    console.log(schedule);
+    let data = [];
+    for (let i in schedule) {
+        if (data.length == 0)data.push([schedule[i].start, schedule[i].finish, [schedule[i].shortName]]);
+        else {
+            for (let j in data) {
+                if (schedule[i].start == data[j][0] && schedule[i].finish == data[j][1]) {
+                    data[j][2].push(schedule[i].shortName);
+                    break;
+                }
+                else {
+                    data.push([schedule[i].start, schedule[i].finish, [schedule[i].shortName]]);
+                    break;
+                }
+            }
+        }
+    }
+    let res = '';
+    for (let i in data){
+        for(let j in data[i][2]) {
+            if (j == data[i][2].length-1) res = res + data[i][2][j];
+            else {
+                res = res + data[i][2][j] + ', ';
+            }
+        }
+        if (i == data.length-1) res = res+ ' с ' + data[i][0] + " до " + data[i][1];
+        else {
+            res = res+ ' с ' + data[i][0] + " до " + data[i][1] + ", ";
+        }
+        res += `\n`;
+    }
+    return res;
+}
+
 const Branches = () => {
     const dispatch = useDispatch();
     const [ filterByName, setFilterByName] = useState('');
@@ -86,10 +121,7 @@ const Branches = () => {
                         <p className="branches-card-subtitle">Телефон:</p>
                         <p className="branches-card-description">{phone}</p>
                         <p className="branches-card-subtitle">График работы:</p>
-                        {opening_hours.split('#').map((item, index)=>(
-                            <p key={index} className="branches-card-description">{item}</p>
-                        ))}
-                        <p className="branches-card-description">{}</p>
+                        <p className="branches-card-description" style={{whiteSpace: "pre-wrap"}}>{scheduleParse(JSON.parse(opening_hours))}</p>
                         <div className="branches-card-options">
                             <div className="card-options-close-extra-window" onClick={(e)=>{
                                 e.target.nextSibling.childNodes[1].style.display = "none";

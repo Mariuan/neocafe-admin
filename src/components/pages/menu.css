@@ -196,3 +196,19 @@
     line-height: 10px;
     text-align: center;
 }
+
+.extra-options-window {
+    position: absolute;
+    top: 35px;
+    border: 1px solid #DDDCDC;
+    padding: 0 25px;
+    border-radius: 10px;
+    background: #fff;
+    transition: .3s all linear;
+}
+
+.extra-options-window p {
+    font-weight: 500;
+    font-size: 18px;
+    cursor: pointer;
+}

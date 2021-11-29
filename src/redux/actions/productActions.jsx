@@ -7,6 +7,13 @@ export const setProducts = (products) => {
     }
 }
 
+export const setRecipeProducts = (products) => {
+    return {
+        type: "SET_RECIPE_PRODUCTS",
+        payload: products,
+    }
+}
+
 export const setDishes = (dishes) => {
     return {
         type: "SET_DISHES",

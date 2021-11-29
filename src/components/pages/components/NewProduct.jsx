@@ -27,12 +27,15 @@ const NewProduct = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        toast.promise(
-        axios.post('https://neocafe6.herokuapp.com/products', {
+        let data = {
             name: name,
             unit: type,
             min: limit,
-        }).catch((err)=>console.log(err)).then((res)=>{
+        }
+        if (category == 0) data = {...data, category: "Сырьё"};
+        else if (category == 1) data = {...data, category: "Готовая продукция"}
+        toast.promise(
+        axios.post('https://neocafe6.herokuapp.com/products', data).catch((err)=>console.log(err)).then((res)=>{
             history.push('/store');
         }),
         {

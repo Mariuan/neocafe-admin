@@ -65,7 +65,6 @@ const parseNoti = (branches) => {
             }
         }
     }
-    console.log(data);
 }
 
 const fetchNoti = async (id) => {
@@ -100,7 +99,6 @@ const Main = () => {
 
 
     }, [useHistory])
-    console.log(notification);
     if (notification) {
         console.log("Hello");
         fetchNoti().then((res)=>parseNoti(res));

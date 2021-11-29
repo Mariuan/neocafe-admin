@@ -80,7 +80,7 @@ const NewEmployee = () => {
                 history.push('/employees')
             }),
             {
-                pending: 'Удаление',
+                pending: 'Добавление',
                 success: 'Сотрудник добавлен',
                 error: 'Ошибка'
             });

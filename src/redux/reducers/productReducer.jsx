@@ -26,6 +26,9 @@ export const productReducer = (state = intialState, {type, payload}) => {
     switch(type){
         case ActionTypes.SET_PRODUCTS:
             return {...state, store: payload};
+        
+        case ActionTypes.SET_RECIPE_PRODUCTS:
+            return {...state, recipe_store: payload};
 
         case ActionTypes.SET_BRANCHES:
             return {...state, branches: payload};

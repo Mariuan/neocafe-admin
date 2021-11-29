@@ -4,7 +4,6 @@ import axios from 'axios';
 import './deleteDish.css';
 
 const DeleteDish = ({data}) => {
-    console.log(data);
     document.body.style.overflow = "hidden";
     return (
         <div className="delete-dish-holder">

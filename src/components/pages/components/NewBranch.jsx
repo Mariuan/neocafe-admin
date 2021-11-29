@@ -12,14 +12,14 @@ const NewBranch = () => {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState(null);
     const [image, setImage] = useState(null);
-    const [ schedule, setSchedule] = useState([
-        {day: 0, name: 'Понедельник', sign: 'Пн', start: '', finish: '', work: false},
-        {day: 1, name: 'Вторник', sign: 'Вт', start: '', finish: '', work: false},
-        {day: 2, name: 'Среда', sign: 'Ср', start: '', finish: '', work: false},
-        {day: 3, name: 'Четверг', sign: 'Чт', start: '', finish: '', work: false},
-        {day: 4, name: 'Пятница', sign: 'Пт', start: '', finish: '', work: false},
-        {day: 5, name: 'Суббота', sign: 'Сб', start: '', finish: '', work: false},
-        {day: 6, name: 'Воскресенье', sign: 'Вс', start: '', finish: '', work: false},
+    const [schedule, setSchedule] = useState([
+        {day: 0, name: "Понедельник", shortName: "Пн", start: "", finish: "", work: false},
+        {day: 1, name: "Вторник", shortName: "Вт", start: "", finish: "", work: false},
+        {day: 2, name: "Среда", shortName: "Ср", start: "", finish: "", work: false},
+        {day: 3, name: "Четверг", shortName: "Чт", start: "", finish: "", work: false},
+        {day: 4, name: "Пятница", shortName: "Пт", start: "", finish: "", work: false},
+        {day: 5, name: "Суббота", shortName: "Сб", start: "", finish: "", work: false},
+        {day: 6, name: "Воскресенье", shortName: "Вс", start: "", finish: "", work: false},
     ])
     const handleSubmit  = (e)=>{
         e.preventDefault();
@@ -32,14 +32,14 @@ const NewBranch = () => {
             name: name,
             address: address,
             phone: phone,
-            opening_hours: scheduleData
+            opening_hours: JSON.stringify(schedule),
         }).then((res)=>{
             if (res.status >= 200 && res.status < 400) {
                 history.push('/branches');
             }
         }),
         {
-            pending: 'Удаление',
+            pending: 'Создание',
             success: 'Филиал создан',
             error: 'Ошибка'
         });
@@ -110,13 +110,15 @@ const NewBranch = () => {
                                     onChange={(e)=>{
                                         let data = schedule;
                                         data[index].finish = e.target.value;
-                                        setSchedule(data);
                                         if (schedule[index].start.length == 5 && e.target.value.length == 5) {
                                             e.target.nextSibling.checked = true;
+                                            data[index].work = true;
                                         }
                                         else {
                                             e.target.nextSibling.checked = false;
+                                            data[index].work = false;
                                         }
+                                        setSchedule(data);
                                     }}/>
 
                                     <input type="checkbox" disabled className="new-employee-time-checkbox"/>

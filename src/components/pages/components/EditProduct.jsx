@@ -23,7 +23,6 @@ const EditProduct = () => {
         axios.get(`https://neocafe6.herokuapp.com/products/${productId.id}`).catch((err)=>{
             console.log(err);
         }).then((res)=>{
-            console.log(res.data);
             dispatch(setSelectedProduct(res.data));
             setStatus(true);
             if (name == '') setName(res.data.name);
@@ -39,23 +38,29 @@ const EditProduct = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
         let unit;
+        let cat;
         
         if (type == 0) unit = 'Г';
         else if (type == 1) unit = 'Мл';
         else if (type == 2) unit = 'Шт';
-        toast.promise(
-        axios.patch(`https://neocafe6.herokuapp.com/products/${productId.id}`, {
+
+        let data = {
             name: name,
-            unit: unit,
             min: parseInt(limit),
-        }).catch((err)=>console.log(err)).then((res)=>{
-            // history.push('/store');
-            console.log(res);
+        }
+
+        if (category == 0) data = {...data, category: "Сырьё"};
+        else if (category == 1) data = {...data, category: "Готовая продукция"};
+
+        toast.promise(
+        axios.patch(`https://neocafe6.herokuapp.com/products/${productId.id}`, data).catch((err)=>console.log(err)).then((res)=>{
+            history.push('/store');
         }),
         {
             pending: 'Редактирование',
-            success: 'Товар изменён',
+            success: 'Успешно отредактировано',
             error: 'Ошибка'
         });
     }

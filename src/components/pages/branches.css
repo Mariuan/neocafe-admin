@@ -25,7 +25,7 @@
 
 .branches-card-list-item {
     width: 300px;
-    /* height: 350px; */
+    /* min-height: 350px; */
     padding: 18px 14px;
     background: #FFFFFF;
     box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.08);

@@ -4,7 +4,7 @@ import coffee_icon from '../../media/Coffee.svg';
 import axios from 'axios';
 import {useDispatch} from 'react-redux';
 import './newDish.css';
-import { setCategories, setProducts } from '../../../redux/actions/productActions';
+import { setCategories, setRecipeProducts } from '../../../redux/actions/productActions';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
 
@@ -24,19 +24,18 @@ const NewDish = () => {
     const dispatch = useDispatch();
     const state = useSelector((state)=>state);
     const history = useHistory();
-    const [consistAmount, setConsistAmount] = useState(1);
+    const [consistAmount, setConsistAmount] = useState(0);
     const [dishData ,setDishData] = useState({name: null, price: null, category: null, image: null, recipe: []})
-    const [consists, setConsists] = useState([{product: null, quantity: null}])
+    const [consists, setConsists] = useState([])
     const [ image, setImage] = useState(null);
     const [imageSrc, setImageSrc] = useState(null);
     let arrConsist = [];
     for (let i = 0; i < consistAmount; i++) {
         arrConsist.push(i);
     }
-
     useEffect(() => {
         fetchProducts().then((res)=>{
-            dispatch(setProducts(res.data));
+            dispatch(setRecipeProducts(res.data));
         });
         fetchCategories().then((res)=>{
             dispatch(setCategories(res.data));
@@ -100,6 +99,7 @@ const NewDish = () => {
                     className="input dish-name-input"
                     placeholder="Наименование блюда"
                     onChange={(e)=>{
+                        if (e.target.style.color != '#464646') e.target.style.color = '#464646';
                         setDishData({...dishData, name: e.target.value});
                     }}
                     required/>
@@ -121,7 +121,7 @@ const NewDish = () => {
                     </select>
                     <h1 className="new-dish-subtitle">Состав блюда</h1>
                     {arrConsist.map((item, index)=>(
-                        <div key={item.id}>
+                        <div key={index}>
                             <select className="dish-name-input input"
                             defaultValue={-1}
                             onChange={(e)=>{
@@ -129,13 +129,13 @@ const NewDish = () => {
                                     e.target.style.color = "#000";
                                 }
                                 let temp = consists;
-                                temp[index].product = state.allProducts.store[parseInt(e.target.value)].id;
+                                temp[index].product = state.allProducts.recipe_store[parseInt(e.target.value)].id;
                                 console.log(temp);
                                 setConsists(temp);
                             }}>
                                 <option value={-1} disabled hidden>Ингридиент</option>
-                                {state.allProducts.store.map((item, index)=>(
-                                    <option key={item.id} value={index}>{item.name}</option>
+                                {state.allProducts.recipe_store.map((item, index)=>(
+                                    <option key={index} value={index}>{item.name}</option>
                                 ))}
                             </select>
                             <input type="text" 
@@ -146,19 +146,6 @@ const NewDish = () => {
                                 temp[index].quantity = parseInt(e.target.value);
                                 setConsists(temp);
                             }}/>
-                            <select className="new-dish-category input" defaultValue={-1}
-                            onChange={(e)=>{
-                                if (e.target.value != -1) {
-                                    e.target.style.color = "#000";
-                                }
-                                const temp = consists;
-                                if (e.target.value == 0) consists[index].unit = 'Г'
-                                else if (e.target.value == 1) consists[index].unit = 'Мл'
-                            }}>
-                                <option value={-1} disabled hidden>г, мл</option>
-                                <option value={0}>Г</option>
-                                <option value={1}>Мл</option>
-                            </select>
                         </div>
                     ))}
                     <button type="button" className="new-dish-add-more-button" onClick={(e)=>{
@@ -167,7 +154,7 @@ const NewDish = () => {
                         console.log(consists);
                     }}>Добавить ещё</button>
                     <button type="submit" className="new-dish-save-button" onClick={handleSubmit}>Сохранить</button>
-                    <button type="button" className="new-dish-cancel-button" onClick={()=>window.location = "/menu"}>Отменить</button>
+                    <button type="button" className="new-dish-cancel-button" onClick={()=>history.goBack()}>Отменить</button>
             </div>
         </div>
     )

@@ -8,6 +8,10 @@ import NewDish from './NewDish';
 import axios, { Axios } from 'axios';
 import { toast } from 'react-toastify';
 import DeleteDish from './windows/DeleteDish';
+import { useHistory } from 'react-router';
+import NewCategory from './windows/NewCategory';
+import { setCategories } from '../../../redux/actions/productActions';
+import { useDispatch } from 'react-redux';
 
 const Delete = (data) =>{
     return (<DeleteDish data={data}></DeleteDish>)
@@ -15,12 +19,19 @@ const Delete = (data) =>{
 
 
 const ProductList = () => {
+    const history = useHistory();
+    const dispatch = useDispatch();
+
     const [filter, setFilter] = useState('');
     const [categoryFilter, setCategoryFilter] = useState(-1);
     const [newDish, setNewDish] = useState(false);
 
     const [deleteDish, setDeleteDish] = useState(false);
     const [deleteDishData, setDeleteDishData] = useState(null);
+
+    const [ options, setOptions ] = useState(false);
+    const [ createCategory, setCreateCategory ] = useState(false);
+    const [ deleteCategory, setDeleteCategory ] = useState(false);
 
     const handleFilterByName = (e) => {
         setFilter(e.target.value);
@@ -31,7 +42,7 @@ const ProductList = () => {
         if (filter === '') {
             if (categoryFilter == -1 || categoryFilter == -2) return item;
             else {
-                if (item.category && item.category.id == categoryFilter) {
+                if (item.category && item.category == categoryFilter) {
                     return item;
                 }
             }
@@ -39,7 +50,7 @@ const ProductList = () => {
         else if (item.name.toLowerCase().includes(filter.toLowerCase())){
             if (categoryFilter == -1) return item;
             else {
-                if (!item.category && item.category.id == categoryFilter) {
+                if (!item.category && item.category == categoryFilter) {
                     return item;
                 }
             }
@@ -73,8 +84,6 @@ const ProductList = () => {
                     e.target.childNodes[0].style.display = 'block';
                     e.target.childNodes[1].style.display = 'block';
                 }
-                
-                console.log(e.target.childNodes[0]);
             }}>
                 <div className="product-item-actions-frame"
                 onClick={(e)=>{
@@ -111,6 +120,8 @@ const ProductList = () => {
         <>
             {deleteDish && 
             <DeleteDish data={deleteDishData} />}
+            {createCategory &&
+            <NewCategory close={()=>setCreateCategory(false)} />}
             
             <div className="menu-filter-block">
                 <div className="menu-filter-search">
@@ -131,9 +142,52 @@ const ProductList = () => {
                     </select>
                 </div>
                 <div className="menu-filter-other-options">
-                    <a href="/menu/new-dish" className="menu-filter-add-button">
-                    <img src={AddButton} alt="add button" className="menu-filter-add-button"/>
-                    </a>
+                    {options &&
+                    <div className="extra-options-window">
+                        {deleteCategory &&
+                        <>
+                            {categoriesList.map((item, index)=>(
+                                <p 
+                                key={index}
+                                onClick={()=>{
+                                    toast.promise(
+                                        axios.delete(`https://neocafe6.herokuapp.com/categories/${item.id}`).then((res)=>{
+                                            setDeleteCategory(false);
+                                            setOptions(false);
+                                            axios.get('https://neocafe6.herokuapp.com/categories').then((res)=>{
+                                                dispatch(setCategories(res.data.data));
+                                            })
+                                        }),
+                                        {
+                                            pending: 'Удаление',
+                                            success: 'Категория удалена',
+                                            error: 'Ошибка'
+                                        }
+                                    )
+                                }}>{item.name}</p>
+                            ))}
+                        </>}
+                        {!deleteCategory &&
+                        <>
+                            <p onClick={(e)=>{
+                                history.push('/menu/new-dish')
+                            }}>Добавить блюдо</p>
+                            <p onClick={(e)=>{
+                                setOptions(false);
+                                setCreateCategory(true);
+                            }}>Добавить категорию</p>
+                            <p onClick={(e)=>{
+                                setDeleteCategory(true);
+                            }}>Удалить категорию</p>
+                        </>}
+                    </div>}
+                    <img src={AddButton} onClick={()=>{
+                        if(options) {
+                            setOptions(false);
+                            setDeleteCategory(false);
+                        }
+                        else setOptions(true);
+                    }} alt="add button" className="menu-filter-add-button"/>
                     
                 </div>
             </div>

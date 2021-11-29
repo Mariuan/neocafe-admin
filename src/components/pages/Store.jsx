@@ -60,23 +60,26 @@ const Store = () => {
                     type="button"
                     className="store-fill-button"
                     onClick={(e)=>{
+                        toast.promise(
                         axios.patch(`https://neocafe6.herokuapp.com/update-storage`, {
                             branch: fillData.branch,
                             product: fillData.id,
                             reserve: parseInt(e.target.previousSibling.value)
                         }).catch((err)=>{
                             console.log(err);
-                            toast.error('Ошибка');
                         }).then((res)=>{
-                            console.log(res);
                             if (res.status >= 200 && res.status < 400) {
                                 setFillWindow(false);
                                 setFillData(null);
                                 document.body.style.overflow = "auto";
-                                toast.success('Продукт пополнен');
                                 fethcProducts().then((res)=>dispatch(setProducts(res.data)));
                             }
-                        })
+                        }),
+                        {
+                            pending: 'Пополнение',
+                            success: 'Продукт пополнен',
+                            error: 'Ошибка'
+                        });
                     }}>Пополнить</button>
                 </div>
             </div>}
@@ -169,7 +172,6 @@ const Store = () => {
                             }
                         }
                         else {
-                            console.log(item);
                             if (filterByBranch == item.branch_id) {
                                 if (filterByCategory == -1) {
                                     if (item.name.toLowerCase().includes(filterByName.toLowerCase())) return item;
@@ -206,8 +208,6 @@ const Store = () => {
                     e.target.childNodes[0].style.display = 'block';
                     e.target.childNodes[1].style.display = 'block';
                 }
-                
-                console.log(e.target.childNodes[0]);
             }}>
                 <div className="product-item-actions-frame"
                 onClick={(e)=>{
