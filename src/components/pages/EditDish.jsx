@@ -5,7 +5,8 @@ import axios from 'axios';
 import {useDispatch} from 'react-redux';
 import './components/newDish.css';
 import { setCategories, setProducts, setSelectedDish } from '../../redux/actions/productActions';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
+import { toast } from 'react-toastify';
 
 const fetchProducts = async () => {
     const response =  await axios.get('https://neocafe6.herokuapp.com/products');
@@ -22,11 +23,19 @@ const fetchDish = async (id) => {
     return response.data.data;
 }
 
+const parseConsists = (consists) => {
+    let data = [];
+    for (let i in consists) {
+        data.push({product: consists[i].id, quantity: consists[i].quantity});
+    }
+    return data;
+}
 
 const EditDish = () => {
     const dispatch = useDispatch();
     const dishId = useParams();
     const state = useSelector((state)=>state);
+    const history = useHistory();
     const [consists, setConsists] = useState([]);
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
@@ -39,7 +48,7 @@ const EditDish = () => {
         fetchDish(dishId.id).then((res)=>{
             dispatch(setSelectedDish(res));
             if (consists.length == 0) {
-                setConsists(res.recipe);
+                setConsists(parseConsists(res.recipe));
                 console.log(res.recipe);
             }
             if (name == '') setName(res.name);
@@ -74,19 +83,15 @@ const EditDish = () => {
             data.append("recipe", JSON.stringify(consists[i]));
         }
         if (image) data.append('image', image);
-        // let config = {
-        //     id: dishId.id,
-        //     name: name,
-        //     category: category,
-        //     price: price,
-        //     recipe: consists
-        // }
-        // if (image) {
-        //     config = {...config, image: image}
-        // }
+        toast.promise(
         axios.patch(`https://neocafe6.herokuapp.com/dishes/${dishId.id}`, data).catch((err)=>console.log(err)).then((res)=>{
-            window.location = "/menu";
-        })
+            history.push('/menu');
+        }),
+        {
+            pending: 'Редактирование',
+            success: 'Успешно отредактировано',
+            error: 'Ошибка'
+        });
     }
     return (
         <div className="new-dish-back">
@@ -145,10 +150,11 @@ const EditDish = () => {
                         ))}
                     </select>
                     <h1 className="new-dish-subtitle">Состав блюда</h1>
-                    {consists.map((item, index)=>(
+                    {consists.map((consist, index)=>(
                         <div key={index}>
                             <select className="dish-name-input input"
-                            defaultValue={-1}
+                            defaultValue={consist.product}
+                            style={{color: '#464646'}}
                             onChange={(e)=>{
                                 if (e.target.value != -1) {
                                     e.target.style.color = "#000";
@@ -165,10 +171,12 @@ const EditDish = () => {
                             <input type="text" 
                             className="dish-quantity-input input"
                             placeholder="Количество"
+                            defaultValue={consist.quantity}
                             onChange={(e)=>{
                                 let data = consists;
                                 data[index].quantity = parseInt(e.target.value);
                                 setConsists(data);
+                                console.log(data);
                             }}/>
                             {/* <select className="new-dish-category input" 
                             value={item.unit}
@@ -186,7 +194,7 @@ const EditDish = () => {
 
                     <button type="button" className="new-dish-add-more-button" onClick={(e)=>{
                         let data = consists;
-                        data = [...data, {product: null, quantity: null}]
+                        data = [...data, {product: -1, quantity: null}]
                         setConsists(data);
                     }}>Добавить ещё</button>
                     <button type="submit" className="new-dish-save-button" onClick={handleSubmit}>Сохранить</button>
