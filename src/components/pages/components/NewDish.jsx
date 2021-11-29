@@ -6,6 +6,7 @@ import {useDispatch} from 'react-redux';
 import './newDish.css';
 import { setCategories, setProducts } from '../../../redux/actions/productActions';
 import { toast } from 'react-toastify';
+import { useHistory } from 'react-router';
 
 const fetchProducts = async () => {
     const response =  await axios.get('https://neocafe6.herokuapp.com/products');
@@ -22,6 +23,7 @@ const fetchCategories = async () => {
 const NewDish = () => {
     const dispatch = useDispatch();
     const state = useSelector((state)=>state);
+    const history = useHistory();
     const [consistAmount, setConsistAmount] = useState(1);
     const [dishData ,setDishData] = useState({name: null, price: null, category: null, image: null, recipe: []})
     const [consists, setConsists] = useState([{product: null, quantity: null}])
@@ -51,9 +53,9 @@ const NewDish = () => {
             data.append('recipe[]', JSON.stringify(consists[i]));
         }
         toast.promise(
-        axios.post('https://neocafe6.herokuapp.com/dishes', data).catch((err)=>console.log(err)),
+        axios.post('https://neocafe6.herokuapp.com/dishes', data).catch((err)=>console.log(err)).then((res)=>history.push('/menu')),
         {
-            pending: 'Удаление',
+            pending: 'Добавление',
             success: 'Блюдо добавлено',
             error: 'Ошибка'
         });

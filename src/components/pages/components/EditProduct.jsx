@@ -48,12 +48,13 @@ const EditProduct = () => {
         axios.patch(`https://neocafe6.herokuapp.com/products/${productId.id}`, {
             name: name,
             unit: unit,
-            min: limit,
+            min: parseInt(limit),
         }).catch((err)=>console.log(err)).then((res)=>{
-            history.push('/store');
+            // history.push('/store');
+            console.log(res);
         }),
         {
-            pending: 'редактирование',
+            pending: 'Редактирование',
             success: 'Товар изменён',
             error: 'Ошибка'
         });

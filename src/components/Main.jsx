@@ -47,8 +47,29 @@ const notifications_data = [
     },
 ]
 
+const parseNoti = (branches) => {
+    let data = [];
+    for (let i in branches) {
+        let flag = true;
+        if (data.length == 0) data.push({branch: branches[i].branch_id, branch_name: branches[i].branch, products: [{product_name: branches[i].product, reserve: branches[i].reserve}]});
+        else {
+            for (let j in data) {
+                if (data[j].branch == branches[i].branch_id) {
+                    data[j].products.push({product_name: branches[i].product, reserve: branches[i].reserve});
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                data.push({branch: branches[i].branch_id, branch_name: branches[i].branch, products: [{product_name: branches[i].product, reserve: branches[i].reserve}]})
+            }
+        }
+    }
+    console.log(data);
+}
+
 const fetchNoti = async (id) => {
-    const response = await axios.get(`https://neocafe6.herokuapp.com/storages/${id}?type=limited`);
+    const response = await axios.get(`https://neocafe6.herokuapp.com/storages?type=limited`);
     console.log(response.data.data);
     return await response.data.data;
 }
@@ -76,7 +97,14 @@ const Main = () => {
         else if (window.location.pathname[1] == 'e' || window.location.pathname[1] == 'n') {
             setPage('employees');
         }
+
+
     }, [useHistory])
+    console.log(notification);
+    if (notification) {
+        console.log("Hello");
+        fetchNoti().then((res)=>parseNoti(res));
+    }
     if (window.location.pathname == '/') {
         return (<Redirect to="/menu" />)
     }

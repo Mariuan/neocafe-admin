@@ -7,11 +7,21 @@ import '../menu.css';
 import NewDish from './NewDish';
 import axios, { Axios } from 'axios';
 import { toast } from 'react-toastify';
+import DeleteDish from './windows/DeleteDish';
+
+const Delete = (data) =>{
+    return (<DeleteDish data={data}></DeleteDish>)
+}
+
 
 const ProductList = () => {
     const [filter, setFilter] = useState('');
     const [categoryFilter, setCategoryFilter] = useState(-1);
     const [newDish, setNewDish] = useState(false);
+
+    const [deleteDish, setDeleteDish] = useState(false);
+    const [deleteDishData, setDeleteDishData] = useState(null);
+
     const handleFilterByName = (e) => {
         setFilter(e.target.value);
     }
@@ -78,16 +88,10 @@ const ProductList = () => {
                         className="product-item-actions-list"
                         onClick={(e)=>{
                             e.stopPropagation();
-                            toast.promise(
-                            axios.delete(`https://neocafe6.herokuapp.com/dishes/${item.id}`).then((res)=>{
-                                console.log(res);
-                                if (res.status == 200) e.target.parentNode.parentNode.parentNode.remove();
-                            }),
-                            {
-                                pending: 'Удаление',
-                                success: 'Товар удален',
-                                error: 'Ошибка'
-                            });
+                            e.target.parentNode.previousSibling.click();
+                            setDeleteDishData({id: item.id, name: item.name, close: ()=>setDeleteDish(false), element: e.target.parentNode.parentNode.parentNode});
+                            setDeleteDish(true);
+                            
                             
                         }}>Удалить</p>
                         <p 
@@ -105,6 +109,9 @@ const ProductList = () => {
     ));
     return (
         <>
+            {deleteDish && 
+            <DeleteDish data={deleteDishData} />}
+            
             <div className="menu-filter-block">
                 <div className="menu-filter-search">
                     <Search handleFilterByName={handleFilterByName}></Search>
