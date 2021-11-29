@@ -23,6 +23,7 @@ import NewEmployee from './components/pages/components/NewEmployee';
 import NewBranch from './components/pages/components/NewBranch';
 import EditBranch from './components/pages/components/EditBranch';
 import EditEmployees from './components/pages/components/EdtiEmployee';
+import EditProduct from './components/pages/components/EditProduct';
 
 function App() {
   const dispatch = useDispatch()
@@ -62,6 +63,7 @@ function App() {
           <Route path="/menu/:id" component={EditDish}/>
           <Route exact path="/store" component={Store}/>
           <Route exact path="/store/new-product" component={NewProduct}/>
+          <Route path="/store/:id" component={EditProduct}/>
           <Route exact path="/branches" component={Branches}/>
           <Route exact path="/branches/new-branch" component={NewBranch}></Route>
           <Route path="/branches/:id" exact component={EditBranch}></Route>

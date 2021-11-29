@@ -91,6 +91,10 @@
     margin-left: 2.5%;
 }
 
+.edit {
+    color: #464646;
+}
+
 .new-product-save-button {
     width: 47%;
     margin: 30px 1.5% 30px 0;

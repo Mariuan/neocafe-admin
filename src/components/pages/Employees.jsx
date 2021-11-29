@@ -10,7 +10,49 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useLocation } from 'react-router';
 
-
+const scheduleParse = (schedule) =>{
+    let data = [];
+    for (let i in schedule) {
+        if(!schedule[i].work) continue;
+        if (data.length == 0)data.push([schedule[i].start, schedule[i].finish, [schedule[i].shortName]]);
+        else {
+            for (let j in data) {
+                if (schedule[i].start == data[j][0] && schedule[i].finish == data[j][1]) {
+                    data[j][2].push(schedule[i].shortName);
+                    break;
+                }
+                else {
+                    data.push([schedule[i].start, schedule[i].finish, [schedule[i].shortName]]);
+                    break;
+                }
+            }
+        }
+        
+    }
+    let res = '';
+    for (let i in data){
+        for(let j in data[i][2]) {
+            if (j == data[i][2].length-1) res = res + data[i][2][j];
+            else {
+                res = res + data[i][2][j] + ', ';
+            }
+        }
+        if (i == data.length-1) res = res+ ' с ' + data[i][0] + " до " + data[i][1];
+        else {
+            res = res+ ' с ' + data[i][0] + " до " + data[i][1] + ", ";
+        }
+    }
+    let short = '';
+    if (res.length < 20) {
+        short = res;
+    }
+    else {
+        for (let i = 0; i < 22; i++) {
+            short = short + res[i];
+        }
+    }
+    return [short, res];
+}
 
 const Employees = () => {
     const dispatch = useDispatch();
@@ -162,7 +204,9 @@ const Employees = () => {
                     else {
                         if (item.branch == filterByBranch) return item;
                     }
-                }).map(({phone, firstname, lastname, birthdate, bonus, role, schedule}, index)=>(
+                }).map(({phone, firstname, lastname, birthdate, bonus, role, schedule}, index)=>{
+                    const data = scheduleParse(JSON.parse(schedule));
+                    return(
                     <div key={index} className="employees-list-item" onClick={(e)=>{
                         if (e.target.classList[1]) {
                             e.target.classList.remove('selected');
@@ -183,7 +227,7 @@ const Employees = () => {
                         </div>
                         <div className="employees-list-item-block employees-list-item-phone no-event">+996 {phone}</div>
                         <div className="employees-list-item-block employees-list-item-birthday no-event">{birthdate}</div>
-                        <div className="employees-list-item-block employees-list-item-schedule no-event"></div>
+                        <div className="employees-list-item-block employees-list-item-schedule no-event">{data[0]}...</div>
                         <div className="product-item-options"
                         onClick={(e)=>{
                             e.stopPropagation();
@@ -192,7 +236,6 @@ const Employees = () => {
                                     e.target.childNodes[1].style.display = 'block';
                                 }
                             
-                            console.log(e.target.childNodes[0]);
                         }}>
                             <div className="product-item-actions-frame"
                             onClick={(e)=>{
@@ -212,7 +255,6 @@ const Employees = () => {
                                                 "Authorization": `Bearer ${localStorage.getItem('neo-cafe-admin-token')}`
                                             }
                                         }).then((res)=>{
-                                            console.log(res);
                                             if (res.status == 200) {
                                                 e.target.parentNode.parentNode.parentNode.remove();
                                             }
@@ -235,7 +277,7 @@ const Employees = () => {
                             <p className="dots no-event">.</p>
                         </div>
                     </div>
-                ))}
+                )})}
             </div>
             
         </div>
