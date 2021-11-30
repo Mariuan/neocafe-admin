@@ -17,6 +17,7 @@ const NewCategory = ({close}) => {
                 name: name
             }).then((res)=>{
                 history.push('/menu');
+                document.body.style.overflow = "auto";
                 close();
                 axios.get('https://neocafe6.herokuapp.com/categories').then((res)=>{
                     dispatch(setCategories(res.data.data));

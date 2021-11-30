@@ -20,10 +20,11 @@ const EditBranch = () => {
     const state = useSelector((state)=>state);
     const branchData = state.allProducts.selectedBranch;
 
-    const [address, setAddress] = useState(null);
-    const [name, setName] = useState(null);
-    const [phone, setPhone] = useState(null);
+    const [address, setAddress] = useState('');
+    const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
     const [image, setImage] = useState(null);
+    const [imageSrc, setImageSrc] = useState(null);
     const [ schedule, setSchedule] = useState([])
     const scheduleArray = [];
     fetchBranch(branchId.id).then((res)=>{
@@ -32,7 +33,7 @@ const EditBranch = () => {
         if (!name) setName(res.name);
         if (!phone) setPhone(res.phone);
         if (schedule.length == 0){
-            setSchedule(res.opening_hours.split('#'));
+            setSchedule(JSON.parse(res.opening_hours));
         } 
     });
     console.log(schedule);
@@ -79,8 +80,6 @@ const EditBranch = () => {
                     }}/>
                     <h1 className="new-branch-schedule-title">График работы</h1>
                     {schedule.map((item, index)=>{
-                        const start = item[5] + item[6] + item[7] + item[8] + item[9];
-                        const finish = item[14] + item[15] + item[16] + item[17] + item[18];
                         if (index< schedule.length-1) return (
                         <div key={index} className="new-employee-time">
                             <p className="new-employee-time-title">{weekDays[index]}</p>
@@ -90,7 +89,7 @@ const EditBranch = () => {
                                     className="new-employee-time-input"
                                     maxLength={5}
                                     placeholder="09:00"
-                                    value={start}
+                                    value={item.start}
                                     onChange={(e)=>{
                                         let data = schedule;
                                         data[index].start = e.target.value;
@@ -107,7 +106,7 @@ const EditBranch = () => {
                                     className="new-employee-time-input"
                                     maxLength={5}
                                     placeholder="16:00"
-                                    value={finish}
+                                    value={item.finish}
                                     onChange={(e)=>{
                                         let data = schedule;
                                         data[index].finish = e.target.value;

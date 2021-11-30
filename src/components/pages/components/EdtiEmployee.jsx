@@ -36,15 +36,7 @@ const NewEmployee = () => {
     const [branch, setBranch] = useState(-2);
     const [post, setPost] = useState(-1);
 
-    const [ schedule, setSchedule] = useState([
-        {day: 0, name: 'Понедельник', start: '', finish: '', work: false},
-        {day: 1, name: 'Вторник', start: '', finish: '', work: false},
-        {day: 2, name: 'Среда', start: '', finish: '', work: false},
-        {day: 3, name: 'Четверг', start: '', finish: '', work: false},
-        {day: 4, name: 'Пятница', start: '', finish: '', work: false},
-        {day: 5, name: 'Суббота', start: '', finish: '', work: false},
-        {day: 6, name: 'Воскресенье', start: '', finish: '', work: false},
-    ])
+    const [ schedule, setSchedule] = useState([])
     const state = useSelector((state)=>state);
 
     useEffect(()=>{
@@ -85,6 +77,7 @@ const NewEmployee = () => {
         if (branch < 0) {
             if (res.branch) setBranch(res.branch);
         }
+        if (schedule.length == 0) setSchedule(JSON.parse(res.schedule))
         dispatch(setSelectedEmployee(res));
     })
 
@@ -173,6 +166,7 @@ const NewEmployee = () => {
                                     <input type="text"
                                     className="new-employee-time-input"
                                     maxLength={5}
+                                    value={item.start}
                                     placeholder="09:00"
                                     onChange={(e)=>{
                                         let data = schedule;
@@ -190,6 +184,7 @@ const NewEmployee = () => {
                                     className="new-employee-time-input"
                                     maxLength={5}
                                     placeholder="16:00"
+                                    value={item.finish}
                                     onChange={(e)=>{
                                         let data = schedule;
                                         data[index].finish = e.target.value;

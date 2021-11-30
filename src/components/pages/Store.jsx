@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 
 
 const fethcProducts = async () => {
-    const response = await axios.get('https://neocafe6.herokuapp.com/storages').catch((err)=>console.log(err));
+    const response = await axios.get('https://neocafe6.herokuapp.com/storages?limit=100').catch((err)=>console.log(err));
     return await response.data;
 }
 
