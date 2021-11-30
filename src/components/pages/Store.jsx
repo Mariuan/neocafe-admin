@@ -25,7 +25,7 @@ const Store = () => {
     const state = useSelector((state)=>state);
     const [filterByName, setFilterByName] = useState('');
     const [filterByBranch, setFilterByBranch] = useState(-2);
-    const [filterByCategory, setFilterByCategory] = useState(-1);
+    const [filterByCategory, setFilterByCategory] = useState(-2);
     const [fillWindow, setFillWindow] = useState(false);
     const [fillData, setFillData] = useState(null);
 
@@ -100,8 +100,12 @@ const Store = () => {
                             <option key={item.id} value={item.id}>{item.name}</option>
                         ))}
                     </select>
-                    <select className="store-filter-by-category" defaultValue={-1} onChange={(e)=>{
+                    <select className="store-filter-by-category" defaultValue={-2} onChange={(e)=>{
                         switch(parseInt(e.target.value)) {
+                            case -1: {
+                                setFilterByCategory(-1);
+                                break;
+                            }
                             case 0: {
                                 setFilterByCategory('Готовая продукция');
                                 break;
@@ -115,11 +119,12 @@ const Store = () => {
                                 break;
                             }
                         }
-                        if (e.target.value != -1) {
+                        if (e.target.value != -2) {
                             e.target.style.color = "#000";
                         }
                     }}>
-                        <option value={-1} disabled hidden>Вид продукции</option>
+                        <option value={-2} disabled hidden>Вид продукции</option>
+                        <option value={-1}>Все</option>
                         <option value={0}>Готовая продукция</option>
                         <option value={1}>Сырьё</option>
                         <option value={2}>Надо пополнить</option>
@@ -140,48 +145,24 @@ const Store = () => {
             </div>
             <div className="store-products-render-list">
                 {renderList.filter((item)=>{
-                    if (filterByName == '') {
-                        if (filterByBranch < 0) {
-                            if (filterByCategory == -1) {
-                                return item;
-                            }
-                            else {
-                                if (filterByCategory == item.category) return item;
-                            }
-                        }
-                        else {
-                            if (filterByBranch == item.branch_id) {
-                                if (filterByCategory == -1) {
-                                    return item;
-                                }
-                                else {
-                                    if (filterByCategory == item.category) return item;
-                                };
-                            }
-                        }
-                    } 
+                    if (filterByName == '') return item;
                     else {
-                        if (filterByBranch < 0) {
-                            if (filterByCategory == -1){
-                                if (item.name.toLowerCase().includes(filterByName.toLowerCase())) return item; 
-                            }
-                            else {
-                                if (filterByCategory == item.category) {
-                                    if (item.name.toLowerCase().includes(filterByName.toLowerCase())) return item;
-                                }
-                            }
+                        if (item.name.toLowerCase().includes(filterByName.toLowerCase())) return item;
+                    }
+                }).filter((item)=>{
+                    if (filterByBranch < 0) return item;
+                    else {
+                        if (filterByBranch == item.branch_id) return item;
+                    }
+                }).filter((item)=>{
+                    console.log(filterByCategory);
+                    if (filterByCategory < 0) return item;
+                    else {
+                        if (filterByCategory == 'Надо пополнить') {
+                            if (item.reserve < item.limit) return item;
                         }
                         else {
-                            if (filterByBranch == item.branch_id) {
-                                if (filterByCategory == -1) {
-                                    if (item.name.toLowerCase().includes(filterByName.toLowerCase())) return item;
-                                }
-                                else {
-                                    if (filterByCategory == item.category) {
-                                        if (item.name.toLowerCase().includes(filterByName.toLowerCase())) return item;
-                                    }
-                                }
-                            }
+                            if (filterByCategory == item.category) return item;
                         }
                     }
                 }).map(({product, reserve, limit, branch_id, product_id, branch, last_update}, index)=>(

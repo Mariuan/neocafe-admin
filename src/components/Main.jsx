@@ -51,25 +51,25 @@ const parseNoti = (branches) => {
     let data = [];
     for (let i in branches) {
         let flag = true;
-        if (data.length == 0) data.push({branch: branches[i].branch_id, branch_name: branches[i].branch, products: [{product_name: branches[i].product, reserve: branches[i].reserve}]});
+        if (data.length == 0) data.push({branch: branches[i].branch_id, branch_name: branches[i].branch, products: [{product_name: branches[i].product, reserve: branches[i].reserve, unit: branches[i].unit}]});
         else {
             for (let j in data) {
                 if (data[j].branch == branches[i].branch_id) {
-                    data[j].products.push({product_name: branches[i].product, reserve: branches[i].reserve});
+                    data[j].products.push({product_name: branches[i].product, reserve: branches[i].reserve, unit: branches[i].unit});
                     flag = false;
                     break;
                 }
             }
             if (flag) {
-                data.push({branch: branches[i].branch_id, branch_name: branches[i].branch, products: [{product_name: branches[i].product, reserve: branches[i].reserve}]})
+                data.push({branch: branches[i].branch_id, branch_name: branches[i].branch, products: [{product_name: branches[i].product, reserve: branches[i].reserve, unit: branches[i].unit}]})
             }
         }
     }
+    return data;
 }
 
 const fetchNoti = async (id) => {
     const response = await axios.get(`https://neocafe6.herokuapp.com/storages?type=limited`);
-    console.log(response.data.data);
     return await response.data.data;
 }
 
@@ -81,6 +81,8 @@ const fetchBranch = async () =>{
 const Main = () => {
     const [page, setPage] = useState('menu');
     const [notification, setNotification] = useState(false);
+    const [notificationData, setNotificationData] = useState([]);
+    const [refresh, setRefresh] = useState(false);
     const dispatch = useDispatch()
     const state = useSelector((state)=>state);
     useEffect(() => {
@@ -99,9 +101,11 @@ const Main = () => {
 
 
     }, [useHistory])
-    if (notification) {
-        console.log("Hello");
-        fetchNoti().then((res)=>parseNoti(res));
+    if (notification && !refresh) {
+        fetchNoti().then((res)=>{
+            setNotificationData(parseNoti(res));
+            setRefresh(true);
+        });
     }
     if (window.location.pathname == '/') {
         return (<Redirect to="/menu" />)
@@ -156,29 +160,36 @@ const Main = () => {
                             <h1 className="notification-header-title">Уведомления</h1>
                             <img src={coolicon} alt="close window" 
                             className="notification-close-icon" 
-                            onClick={()=>setNotification(false)}/>
+                            onClick={()=>{
+                                setNotification(false);
+                                setRefresh(false);
+                            }}/>
                     </div>
                     <div className="notification-content">
-                            {notifications_data.map((item, index)=>(
+                        {notificationData.length == 0 &&
+                        <p>Нету уведомлений</p>}
+                        {notificationData.length > 0 &&
+                        <>
+                            {notificationData.map((item, index)=>(
                                 <div key={index} className="notification-item">
                                     <img src={nc} alt="" className="notification-item-icon"/>
                                     <div className="notification-item-content">
-                                        <div className="notification-item-status">{item.status}</div>
+                                        <div className="notification-item-status">Лимит упал</div>
                                         <div className="notification-item-description">
-                                            {item.description.map((item, index)=>(
+                                            {item.products.map((item, index)=>(
                                                 <p 
-                                                key={item.id}
-                                                className="notification-item-consist">{`${item.name} ${item.quantity} ${item.unit},`}</p>
+                                                key={index}
+                                                className="notification-item-consist">{`${item.product_name} ${item.reserve} ${item.unit},`}</p>
                                             ))}
                                         </div>
                                         <div className="notification-footer">
-                                            <div className="notification-item-branch">{item.branch}</div>
-                                            <div className="notification-item-time">{item.time}</div>
+                                            <div className="notification-item-branch">{item.branch_name}</div>
                                         </div>
 
                                     </div>
                                 </div>
                             ))}
+                        </>}
                     </div>
                 </div>
                 }

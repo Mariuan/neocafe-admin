@@ -172,9 +172,11 @@ const NewEmployee = () => {
                                         setSchedule(data);
                                         if (schedule[index].finish.length == 5 && e.target.value.length == 5) {
                                             e.target.nextSibling.nextSibling.nextSibling.checked = true;
+                                            data[index].work = true;
                                         }
                                         else {
                                             e.target.nextSibling.nextSibling.nextSibling.checked = false;
+                                            data[index].work = false;
                                         }
                                     }}/>
                                     <p className='new-employee-time-title'>&nbsp;&nbsp;до&nbsp;&nbsp;</p>
@@ -196,7 +198,9 @@ const NewEmployee = () => {
                                         setSchedule(data);
                                     }}/>
 
-                                    <input type="checkbox" disabled className="new-employee-time-checkbox"/>
+                                    <input type="checkbox" onLoad={(e)=>{
+                                        if (schedule[index].work) e.target.checked = true;
+                                        }} disabled className="new-employee-time-checkbox"/>
                             </div>
                         </div>
                     ))}

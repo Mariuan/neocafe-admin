@@ -108,7 +108,7 @@
 }
 
 .notification-item-icon {
-    margin: 0 10px 0 0;
+    margin: 0 15px 0 0;
 }
 
 .notification-item-status {
@@ -127,4 +127,13 @@
 .notification-item-consist {
     margin: 0 5px;
     display: inline-block;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.notification-item-branch {
+    font-weight: 700;
+    font-size: 20px;
+    margin: 30px 0 10px 0;
+    color: #2A58AD;
 }
