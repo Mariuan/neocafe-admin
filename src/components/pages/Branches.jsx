@@ -34,9 +34,7 @@ const Branches = () => {
     const handleFilterByName = (e) => {
         setFilterByName(e.target.value);
     }
-    const handleRemove = (e)=>{
-        e.target.parentNode.parentNode.parentNode.parentNode.remove();
-    }
+    
     const products = useSelector((state)=>state);
     const renderList = products.allProducts.branches;
     useEffect(()=>{

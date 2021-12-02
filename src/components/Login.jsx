@@ -2,7 +2,7 @@ import React, { useState} from 'react'
 import './Login.css';
 import Eye from './media/Eye.svg';
 import EyeSlash from './media/EyeSlash.svg';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setLogin } from '../redux/actions/productActions';
 import axios from 'axios';
 
@@ -21,7 +21,6 @@ const Login = () => {
     const [ correctData, setCorrectData ] = useState(true);
     const [ visiblePassword, setVissiblePassword ] = useState(false);
 
-    const state = useSelector((state)=>state);
     const dispatch = useDispatch();
 
     const handleLoginSubmit = (e) => {
