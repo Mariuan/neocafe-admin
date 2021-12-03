@@ -184,7 +184,7 @@ const Store = () => {
                             }
                         }
                     }
-                }).map(({product, reserve, limit, branch_id, product_id, branch, last_update}, index)=>(
+                }).map(({product, reserve, limit, branch_id, product_id, branch, last_update, unit}, index)=>(
                     <div 
                     key={index} 
                     className="store-product-list-item"
@@ -198,8 +198,8 @@ const Store = () => {
                     }}>
                         <div className="store-product-list-item-number no-event">{index}</div>
                         <div className="store-product-list-item-name no-event">{product}</div>
-                        <div className="store-product-list-item-quantity no-event">{reserve}</div>
-                        <div className="store-product-list-item-limit no-event">{limit}</div>
+                        <div className="store-product-list-item-quantity no-event">{reserve} {unit}</div>
+                        <div className="store-product-list-item-limit no-event">{limit} {unit}</div>
                         <div className="store-product-list-item-date no-event">{last_update[8]}{last_update[9]}.{last_update[5]}{last_update[6]}.{last_update[0]}{last_update[1]}{last_update[2]}{last_update[3]}</div>
                         <div className="product-item-options"
             onClick={(e)=>{

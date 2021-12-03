@@ -33,7 +33,7 @@ const Login = () => {
             else {
                 loginPhone = phone.slice(3);
             }
-            axios.post('https://neocafe6.herokuapp.com/login', {
+            axios.post('https://neocafe6.herokuapp.com/adminLogin', {
             "phone": parseInt(loginPhone),
             "code": password
             }).catch((err)=>{
