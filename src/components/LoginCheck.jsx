@@ -2,7 +2,7 @@ import axios from 'axios'
 import React from 'react'
 import Login from './Login'
 import { useDispatch } from 'react-redux'
-import { setLogin, setToken } from '../redux/actions/productActions'
+import { setToken } from '../redux/actions/productActions'
 
 const LoginCheck = () => {
     const dispatch = useDispatch();

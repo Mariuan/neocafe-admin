@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import { useSelector } from 'react-redux';
-import coffee_icon from '../media/Coffee.svg';
 import axios from 'axios';
 import {useDispatch} from 'react-redux';
 import './components/newDish.css';

@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react'
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
+import { toast } from 'react-toastify';
 import { setSelectedBranch } from '../../../redux/actions/productActions';
 import Branch_icon from '../../media/Branch.svg';
 import './newBranch.css';
@@ -20,24 +21,47 @@ const EditBranch = () => {
     const state = useSelector((state)=>state);
     const branchData = state.allProducts.selectedBranch;
 
-    const [address, setAddress] = useState(null);
-    const [name, setName] = useState(null);
-    const [phone, setPhone] = useState(null);
+    const [address, setAddress] = useState('');
+    const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
     const [image, setImage] = useState(null);
+    const [imageSrc, setImageSrc] = useState(null);
     const [ schedule, setSchedule] = useState([])
     const scheduleArray = [];
-    fetchBranch(branchId.id).then((res)=>{
-        dispatch(setSelectedBranch(res));
-        if (!address) setAddress(res.address); 
-        if (!name) setName(res.name);
-        if (!phone) setPhone(res.phone);
-        if (schedule.length == 0){
-            setSchedule(res.opening_hours.split('#'));
-        } 
-    });
-    console.log(schedule);
-    const handleSubmit = () => {
 
+    const [status, setStatus] = useState(false);
+
+    if (!status) {
+        setStatus(true);
+        fetchBranch(branchId.id).then((res)=>{
+            dispatch(setSelectedBranch(res));
+            if (!address) setAddress(res.address); 
+            if (!name) setName(res.name);
+            if (!phone) setPhone(res.phone);
+            if (schedule.length == 0){
+                setSchedule(JSON.parse(res.opening_hours));
+            } 
+        });
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(schedule);
+        toast.promise(
+            axios.patch(`https://neocafe6.herokuapp.com/branches/${branchId.id}`, {
+                name: name,
+                address: address,
+                phone: phone,
+                opening_hours: JSON.stringify(schedule)
+            },{
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem('neo-cafe-admin-token')}`
+                }
+            }),{
+                pending: 'Обновление',
+                success: "Данные обновлены",
+                error: 'Ошибка'
+            }
+        )
     }
     return(
     <div className="edit-branch-page">
@@ -79,9 +103,7 @@ const EditBranch = () => {
                     }}/>
                     <h1 className="new-branch-schedule-title">График работы</h1>
                     {schedule.map((item, index)=>{
-                        const start = item[5] + item[6] + item[7] + item[8] + item[9];
-                        const finish = item[14] + item[15] + item[16] + item[17] + item[18];
-                        if (index< schedule.length-1) return (
+                        if (index< schedule.length) return (
                         <div key={index} className="new-employee-time">
                             <p className="new-employee-time-title">{weekDays[index]}</p>
                                 <div className="new-employee-schedule-time">
@@ -89,35 +111,37 @@ const EditBranch = () => {
                                     <input type="text"
                                     className="new-employee-time-input"
                                     maxLength={5}
-                                    placeholder="09:00"
-                                    value={start}
+                                    placeholder={item.start}
                                     onChange={(e)=>{
                                         let data = schedule;
                                         data[index].start = e.target.value;
-                                        setSchedule(data);
                                         if (schedule[index].finish.length == 5 && e.target.value.length == 5) {
                                             e.target.nextSibling.nextSibling.nextSibling.checked = true;
+                                            data[index].work = true;
                                         }
                                         else {
                                             e.target.nextSibling.nextSibling.nextSibling.checked = false;
+                                            data[index].work = false;
                                         }
+                                        setSchedule(data);
                                     }}/>
                                     <p className='new-employee-time-title'>&nbsp;&nbsp;до&nbsp;&nbsp;</p>
                                     <input type="text"
                                     className="new-employee-time-input"
                                     maxLength={5}
-                                    placeholder="16:00"
-                                    value={finish}
+                                    placeholder={item.finish}
                                     onChange={(e)=>{
                                         let data = schedule;
                                         data[index].finish = e.target.value;
-                                        setSchedule(data);
                                         if (schedule[index].start.length == 5 && e.target.value.length == 5) {
                                             e.target.nextSibling.checked = true;
+                                            data[index].work = true;
                                         }
                                         else {
                                             e.target.nextSibling.checked = false;
+                                            data[index].work = false;
                                         }
+                                        setSchedule(data);
                                     }}/>
 
                                     <input type="checkbox" disabled checked className="new-employee-time-checkbox"/>
